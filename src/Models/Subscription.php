@@ -14,7 +14,10 @@ class Subscription
         $this->id = $id;
     }
 
-    public function getId()
+    /**
+     * @return string
+     */
+    public function getId(): string
     {
         return $this->id;
     }

@@ -7,6 +7,7 @@ use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
+use TeamGantt\Subscreeb\Models\Subscription;
 
 class SubscriptionManager
 {
@@ -24,8 +25,11 @@ class SubscriptionManager
         $this->gateway = $gateway;
     }
 
-
-    public function create(array $data)
+    /**
+     * @param array $data
+     * @return Subscription
+     */
+    public function create(array $data): Subscription
     {
         // Validate structure of $data
         $customer = new Customer(
@@ -38,15 +42,5 @@ class SubscriptionManager
         $plan = new Plan($data['plan']['id']);
 
         return $this->gateway->create($customer, $payment, $plan);
-    }
-
-    public function cancel()
-    {
-
-    }
-
-    public function change()
-    {
-
     }
 }

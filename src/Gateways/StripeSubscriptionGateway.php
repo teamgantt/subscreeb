@@ -10,14 +10,14 @@ use TeamGantt\Subscreeb\Models\Messages\CreateCustomerResponse;
 
 class StripeSubscriptionGateway
 {
-    protected $gateway;
+    protected StripeClient $gateway;
 
     public function __construct(string $apiKey)
     {
         $this->gateway = new StripeClient($apiKey);
     }
 
-    public function create(string $customerId, string $email, string $paymentId)
+    public function create(string $customerId, string $email, string $paymentId): string
     {
         if (!$customerId) {
             $customer = $this->gateway->customers->create([
@@ -41,7 +41,7 @@ class StripeSubscriptionGateway
                     'default_payment_method' => $paymentMethod->id
                 ]
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new CreatePaymentMethodException($e->getMessage());
         }
 
@@ -49,15 +49,17 @@ class StripeSubscriptionGateway
             'customer' => $customerId,
             'items' => [['price' => 'price_1GuPcJIkgriGW4cNN8oJ4dQO']],
         ]);
+
+        return $subscription->id;
     }
 
-    public function createCustomer(string $email, string $firstName, string $lastName): CreateCustomerResponse
+    public function createCustomer(string $email, string $firstName, string $lastName): string
     {
         $customer = $this->gateway->customers->create([
             'name' => "$firstName $lastName",
             'email' => $email
         ]);
 
-        return new CreateCustomerResponse($customer->id);
+        return $customer->id;
     }
 }

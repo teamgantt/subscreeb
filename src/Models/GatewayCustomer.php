@@ -40,6 +40,4 @@ class GatewayCustomer
     {
         return $this->paymentToken;
     }
-
-
 }

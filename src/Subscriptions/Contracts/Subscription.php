@@ -4,5 +4,4 @@ namespace TeamGantt\Subscreeb\Subscriptions\Contracts;
 
 interface Subscription
 {
-
 }

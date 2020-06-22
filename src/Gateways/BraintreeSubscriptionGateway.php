@@ -66,11 +66,11 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             ]);
 
         if (!$result->success) {
-            throw new CreateCustomerException($result->message);
+            throw new CreateCustomerException($result->message); /** @phpstan-ignore-line */
         }
 
-        $customerId = $result->customer->id;
-        $paymentToken = $result->customer->paymentMethods[0]->token;
+        $customerId = $result->customer->id; /** @phpstan-ignore-line */
+        $paymentToken = $result->customer->paymentMethods[0]->token; /** @phpstan-ignore-line */
 
         return new GatewayCustomer($customerId, $paymentToken);
     }
@@ -106,7 +106,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             throw new CustomerNotFoundException("Customer with id {$customer->getId()} does not exist");
         }
 
-        $customerId = $gatewayCustomer->id;
+        $customerId = $gatewayCustomer->id; /** @phpstan-ignore-line */
 
         return new GatewayCustomer($customerId, '');
     }

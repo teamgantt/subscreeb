@@ -25,6 +25,4 @@ class Plan
     {
         return $this->id;
     }
-
-
 }
