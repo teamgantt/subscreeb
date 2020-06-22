@@ -1,0 +1,45 @@
+{
+    "name": "teamgantt/subscreeb",
+    "description": "",
+    "keywords": [
+        "teamgantt",
+        "subscreeb"
+    ],
+    "homepage": "https://github.com/teamgant/subscreeb",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Tyson Nero",
+            "email": "tyson@teamgantt.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "braintree/braintree_php": "^5.1",
+        "stripe/stripe-php": "^7.37",
+        "vlucas/phpdotenv": "^5.0"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.9",
+        "kahlan/kahlan": "^4.7",
+        "phpunit/phpunit": "^9.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "TeamGantt\\Subscreeb\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TeamGantt\\Subscreeb\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/kahlan"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
