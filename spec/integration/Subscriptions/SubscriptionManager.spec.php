@@ -28,12 +28,29 @@ describe('SubscriptionManager', function () {
 
         context('with an existing user', function () {
 
+            beforeAll(function () {
+                $this->braintree = new \Braintree\Gateway([
+                    'environment' => $this->config->getEnvironment(),
+                    'merchantId' => $this->config->getMerchantId(),
+                    'publicKey' => $this->config->getPublicKey(),
+                    'privateKey' => $this->config->getPrivateKey()
+                ]);
+
+                $result = $this->braintree->customer()->create([
+                    'firstName' => $this->faker->firstName,
+                    'lastName' => $this->faker->lastName,
+                    'email' => $this->faker->email
+                ]);
+
+                $this->customer = $result->customer;
+            });
+
             fit('should create a subscription', function () {
                 $manager = new SubscriptionManager($this->gateway);
 
                 $data = [
                     'customer' => [
-                        'id' => '504412174',
+                        'id' => $this->customer->id,
                     ],
                     'payment' => [
                         'nonce' => 'fake-valid-visa-nonce'
@@ -75,7 +92,7 @@ describe('SubscriptionManager', function () {
 
                 $data = [
                     'customer' => [
-                        'id' => '504412174',
+                        'id' => $this->customer->id,
                     ],
                     'payment' => [
                         'nonce' => 'bad-nonce'
@@ -90,6 +107,10 @@ describe('SubscriptionManager', function () {
                 };
 
                 expect($sut)->toThrow(new CreatePaymentMethodException('Unknown or expired payment_method_nonce.'));
+            });
+
+            afterAll(function () {
+               $this->braintree->customer()->delete($this->customer->id);
             });
         });
 
