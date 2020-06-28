@@ -2,24 +2,29 @@
 
 namespace TeamGantt\Subscreeb\Tests;
 
+use Dotenv\Dotenv;
 use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Gateways\BraintreeSubscriptionGateway;
+use TeamGantt\Subscreeb\Gateways\Configuration\BraintreeConfiguration;
+use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomerBuilder;
 use TeamGantt\Subscreeb\Subscriptions\SubscriptionManager;
 
-$dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
+$dotenv = Dotenv::createImmutable(dirname(__DIR__, 3));
 $dotenv->load();
 
 describe('SubscriptionManager', function () {
 
     beforeAll(function () {
-        $this->gateway = new BraintreeSubscriptionGateway(
+        $this->config = new BraintreeConfiguration(
             $_ENV['BRAINTREE_ENVIRONMENT'],
             $_ENV['BRAINTREE_MERCHANT_ID'],
             $_ENV['BRAINTREE_PUBLIC_KEY'],
             $_ENV['BRAINTREE_PRIVATE_KEY']
         );
+
+        $this->gateway = new BraintreeSubscriptionGateway($this->config, new GatewayCustomerBuilder());
 
         $this->faker = \Faker\Factory::create();
     });

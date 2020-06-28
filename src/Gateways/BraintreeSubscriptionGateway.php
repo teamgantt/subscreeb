@@ -7,25 +7,42 @@ use Braintree\Gateway as Braintree;
 use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
+use TeamGantt\Subscreeb\Gateways\Configuration\BraintreeConfigurationInterface;
 use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
 use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\GatewayCustomer;
+use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomer;
+use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomerBuilderInterface;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription;
 
 class BraintreeSubscriptionGateway implements SubscriptionGateway
 {
+    /**
+     * @var Braintree
+     */
     protected Braintree $gateway;
 
-    public function __construct(string $environment, string $merchantId, string $publicKey, string $privateKey)
+    /**
+     * @var GatewayCustomerBuilderInterface
+     */
+    protected GatewayCustomerBuilderInterface $gatewayCustomerBuilder;
+
+    /**
+     * BraintreeSubscriptionGateway constructor.
+     * @param BraintreeConfigurationInterface $config
+     * @param GatewayCustomerBuilderInterface $gatewayCustomerBuilder
+     */
+    public function __construct(BraintreeConfigurationInterface $config, GatewayCustomerBuilderInterface $gatewayCustomerBuilder)
     {
         $this->gateway = new Braintree([
-            'environment' => $environment,
-            'merchantId' => $merchantId,
-            'publicKey' => $publicKey,
-            'privateKey' => $privateKey
+            'environment' => $config->getEnvironment(),
+            'merchantId' => $config->getMerchantId(),
+            'publicKey' => $config->getPublicKey(),
+            'privateKey' => $config->getPrivateKey()
         ]);
+
+        $this->gatewayCustomerBuilder = $gatewayCustomerBuilder;
     }
 
     public function create(Customer $customer, Payment $payment, Plan $plan): Subscription
@@ -66,13 +83,16 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             ]);
 
         if (!$result->success) {
-            throw new CreateCustomerException($result->message); /** @phpstan-ignore-line */
+            throw new CreateCustomerException($result->message); // @phpstan-ignore-line
         }
 
-        $customerId = $result->customer->id; /** @phpstan-ignore-line */
-        $paymentToken = $result->customer->paymentMethods[0]->token; /** @phpstan-ignore-line */
+        $customerId = $result->customer->id; // @phpstan-ignore-line
+        $paymentToken = $result->customer->paymentMethods[0]->token; // @phpstan-ignore-line
 
-        return new GatewayCustomer($customerId, $paymentToken);
+        return $this->gatewayCustomerBuilder
+            ->withId($customerId)
+            ->withPaymentToken($paymentToken)
+            ->build();
     }
 
     protected function createPaymentMethod(GatewayCustomer $customer, Payment $payment): string
@@ -106,8 +126,10 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             throw new CustomerNotFoundException("Customer with id {$customer->getId()} does not exist");
         }
 
-        $customerId = $gatewayCustomer->id; /** @phpstan-ignore-line */
+        $customerId = $gatewayCustomer->id; // @phpstan-ignore-line
 
-        return new GatewayCustomer($customerId, '');
+        return $this->gatewayCustomerBuilder
+            ->withId($customerId)
+            ->build();
     }
 }
