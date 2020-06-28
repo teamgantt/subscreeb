@@ -40,8 +40,8 @@
     },
     "scripts": {
         "test": "vendor/bin/kahlan",
-        "phpcs": "vendor/bin/phpcs --standard=PSR12 --colors -s src",
-        "phpcs:fix": "vendor/bin/phpcbf --standard=PSR2 src",
+        "phpcs": "vendor/bin/phpcs --standard=PSR12 --colors -n -s src",
+        "phpcs:fix": "vendor/bin/phpcbf --standard=PSR12 src",
         "phpstan": "vendor/bin/phpstan analyze -c phpstan.neon src"
     },
     "config": {
