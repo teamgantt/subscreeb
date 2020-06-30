@@ -7,7 +7,7 @@ class GatewayCustomer
     /**
      * @var string
      */
-    private string $id;
+    protected string $id;
 
     /**
      * @var string

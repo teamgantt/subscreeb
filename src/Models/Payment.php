@@ -4,6 +4,9 @@ namespace TeamGantt\Subscreeb\Models;
 
 class Payment
 {
+    /**
+     * @var string
+     */
     protected string $nonce;
 
     /**

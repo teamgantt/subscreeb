@@ -7,12 +7,12 @@ class Subscription
     /**
      * @var string
      */
-    private string $id;
+    protected string $id;
 
     /**
      * @var string
      */
-    private string $gatewayCustomerId;
+    protected string $gatewayCustomerId;
 
     /**
      * @var string  Example: 2020-01-01
