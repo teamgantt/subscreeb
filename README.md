@@ -31,7 +31,7 @@ $data = [
     ],
     'plan' => [
         'id' => '401m',
-        'firstBillingDate' => '2020-12-01',
+        'startDate' => '2020-12-01',
     ],
     'users' => [
         'id' => 'user-id',

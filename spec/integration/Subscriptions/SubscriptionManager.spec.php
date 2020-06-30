@@ -2,9 +2,11 @@
 
 namespace TeamGantt\Subscreeb\Tests;
 
+use Carbon\Carbon;
 use Dotenv\Dotenv;
 use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
+use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Gateways\BraintreeSubscriptionGateway;
 use TeamGantt\Subscreeb\Gateways\Configuration\BraintreeConfiguration;
@@ -68,6 +70,52 @@ describe('SubscriptionManager', function () {
                 $subscription = $manager->create($data);
 
                 expect($subscription->getId())->not->toBeFalsy();
+            });
+
+            fit('should create a subscription with a start date', function () {
+                $manager = new SubscriptionManager($this->gateway);
+                $startDate = Carbon::tomorrow()->toDateString();
+
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => '400y',
+                        'startDate' => $startDate
+                    ]
+                ];
+
+                $subscription = $manager->create($data);
+
+                expect($subscription->getStartDate())->toBe($startDate);
+            });
+
+            fit('should throw an exception when start date is invalid', function () {
+                $manager = new SubscriptionManager($this->gateway);
+                $startDate = Carbon::yesterday()->toDateString();
+
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => '401y',
+                        'startDate' => $startDate
+                    ]
+                ];
+
+                $sut = function () use ($manager, $data) {
+                    $manager->create($data);
+                };
+
+                expect($sut)->toThrow(new CreateSubscriptionException('First Billing Date cannot be in the past.'));
             });
 
             fit('should throw an exception when user not found', function () {

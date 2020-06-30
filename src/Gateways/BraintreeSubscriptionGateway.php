@@ -4,8 +4,10 @@ namespace TeamGantt\Subscreeb\Gateways;
 
 use Braintree\Exception\NotFound;
 use Braintree\Gateway as Braintree;
+use Carbon\Carbon;
 use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
+use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Configuration\BraintreeConfigurationInterface;
 use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
@@ -48,7 +50,6 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
     public function create(Customer $customer, Payment $payment, Plan $plan): Subscription
     {
         $customerId = $customer->getId();
-        $planId = $plan->getId();
         $paymentToken = null;
 
         if (!$customerId) {
@@ -59,16 +60,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             $paymentToken = $this->createPaymentMethod($gatewayCustomer, $payment);
         }
 
-        $subscriptionResult = $this->gateway
-            ->subscription()
-            ->create([
-                'paymentMethodToken' => $paymentToken,
-                'planId' => $planId
-            ]);
-
-        $subscriptionId = $subscriptionResult->subscription->id;
-
-        return new Subscription($subscriptionId, $gatewayCustomer->getId());
+        return $this->createSubscription($gatewayCustomer, $plan, $paymentToken);
     }
 
     protected function createGatewayCustomer(Customer $customer, Payment $payment): GatewayCustomer
@@ -112,6 +104,32 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
         }
 
         return $result->paymentMethod->token;
+    }
+
+    protected function createSubscription(GatewayCustomer $gatewayCustomer, Plan $plan, string $paymentToken): Subscription
+    {
+        $planId = $plan->getId();
+        $startDate = $plan->getStartDate()
+            ? new Carbon($plan->getStartDate())
+            : new Carbon();
+
+        $result = $this->gateway
+            ->subscription()
+            ->create([
+                'paymentMethodToken' => $paymentToken,
+                'planId' => $planId,
+                'firstBillingDate' => $startDate
+            ]);
+
+        if (!$result->success) {
+            throw new CreateSubscriptionException($result->message);
+        }
+
+        $subscription = $result->subscription;
+        $subscriptionId = $subscription->id;
+        $subscriptionStartDate = new Carbon($subscription->firstBillingDate);
+
+        return new Subscription($subscriptionId, $gatewayCustomer->getId(), $subscriptionStartDate->toDateString());
     }
 
     protected function findGatewayCustomer(Customer $customer): GatewayCustomer

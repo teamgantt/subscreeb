@@ -39,7 +39,10 @@ class SubscriptionManager
             $data['customer']['emailAddress'] ?? ''
         );
         $payment = new Payment($data['payment']['nonce']);
-        $plan = new Plan($data['plan']['id']);
+        $plan = new Plan(
+            $data['plan']['id'],
+            $data['plan']['startDate'] ?? ''
+        );
 
         return $this->gateway->create($customer, $payment, $plan);
     }

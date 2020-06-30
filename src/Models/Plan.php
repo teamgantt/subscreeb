@@ -10,12 +10,19 @@ class Plan
     protected string $id;
 
     /**
+     * @var string
+     */
+    protected string $startDate;
+
+    /**
      * Plan constructor.
      * @param string $id
+     * @param string $startDate
      */
-    public function __construct(string $id)
+    public function __construct(string $id, string $startDate)
     {
         $this->id = $id;
+        $this->startDate = $startDate;
     }
 
     /**
@@ -24,5 +31,13 @@ class Plan
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStartDate(): string
+    {
+        return $this->startDate;
     }
 }
