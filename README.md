@@ -1,9 +1,9 @@
 # Very short description of the package
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/teamgant/subscreeb.svg?style=flat-square)](https://packagist.org/packages/teamgant/subscreeb)
-[![Build Status](https://img.shields.io/travis/teamgant/subscreeb/master.svg?style=flat-square)](https://travis-ci.org/teamgant/subscreeb)
-[![Quality Score](https://img.shields.io/scrutinizer/g/teamgant/subscreeb.svg?style=flat-square)](https://scrutinizer-ci.com/g/teamgant/subscreeb)
-[![Total Downloads](https://img.shields.io/packagist/dt/teamgant/subscreeb.svg?style=flat-square)](https://packagist.org/packages/teamgant/subscreeb)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/teamgantt/subscreeb.svg?style=flat-square)](https://packagist.org/packages/teamgantt/subscreeb)
+[![Build Status](https://img.shields.io/travis/teamgantt/subscreeb/master.svg?style=flat-square)](https://travis-ci.org/teamgantt/subscreeb)
+[![Quality Score](https://img.shields.io/scrutinizer/g/teamgantt/subscreeb.svg?style=flat-square)](https://scrutinizer-ci.com/g/teamgantt/subscreeb)
+[![Total Downloads](https://img.shields.io/packagist/dt/teamgantt/subscreeb.svg?style=flat-square)](https://packagist.org/packages/teamgantt/subscreeb)
 
 This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
 
@@ -12,7 +12,7 @@ This is where your description should go. Try and limit it to a paragraph or two
 You can install the package via composer:
 
 ```bash
-composer require teamgant/subscreeb
+composer require teamgantt/subscreeb
 ```
 
 ## Usage
