@@ -9,9 +9,20 @@ class Subscription
      */
     private string $id;
 
-    public function __construct(string $id)
+    /**
+     * @var string
+     */
+    private string $gatewayCustomerId;
+
+    /**
+     * Subscription constructor.
+     * @param string $id
+     * @param string $gatewayCustomerId
+     */
+    public function __construct(string $id, string $gatewayCustomerId)
     {
         $this->id = $id;
+        $this->gatewayCustomerId = $gatewayCustomerId;
     }
 
     /**
@@ -20,5 +31,13 @@ class Subscription
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGatewayCustomerId(): string
+    {
+        return $this->gatewayCustomerId;
     }
 }

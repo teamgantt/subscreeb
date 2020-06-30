@@ -141,6 +141,7 @@ describe('SubscriptionManager', function () {
                 $subscription = $manager->create($data);
 
                 expect($subscription->getId())->not->toBeFalsy();
+                expect($subscription->getGatewayCustomerId())->not->toBeFalsy();
             });
 
             fit('should throw an exception if customer creation fails', function () {

@@ -68,7 +68,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
 
         $subscriptionId = $subscriptionResult->subscription->id;
 
-        return new Subscription($subscriptionId);
+        return new Subscription($subscriptionId, $gatewayCustomer->getId());
     }
 
     protected function createGatewayCustomer(Customer $customer, Payment $payment): GatewayCustomer
