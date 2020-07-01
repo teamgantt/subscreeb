@@ -27,6 +27,7 @@ describe('SubscriptionManager', function () {
         );
 
         $this->gateway = new BraintreeSubscriptionGateway($this->config, new GatewayCustomerBuilder());
+        $this->manager = new SubscriptionManager($this->gateway);
 
         $this->faker = \Faker\Factory::create();
     });
@@ -53,8 +54,6 @@ describe('SubscriptionManager', function () {
             });
 
             it('should create a subscription', function () {
-                $manager = new SubscriptionManager($this->gateway);
-
                 $data = [
                     'customer' => [
                         'id' => $this->customer->id,
@@ -67,13 +66,12 @@ describe('SubscriptionManager', function () {
                     ]
                 ];
 
-                $subscription = $manager->create($data);
+                $subscription = $this->manager->create($data);
 
                 expect($subscription->getId())->not->toBeFalsy();
             });
 
             it('should create a subscription with a start date', function () {
-                $manager = new SubscriptionManager($this->gateway);
                 $startDate = Carbon::tomorrow()->toDateString();
 
                 $data = [
@@ -89,13 +87,12 @@ describe('SubscriptionManager', function () {
                     ]
                 ];
 
-                $subscription = $manager->create($data);
+                $subscription = $this->manager->create($data);
 
                 expect($subscription->getStartDate())->toBe($startDate);
             });
 
             it('should throw an exception when start date is invalid', function () {
-                $manager = new SubscriptionManager($this->gateway);
                 $startDate = Carbon::yesterday()->toDateString();
 
                 $data = [
@@ -111,16 +108,14 @@ describe('SubscriptionManager', function () {
                     ]
                 ];
 
-                $sut = function () use ($manager, $data) {
-                    $manager->create($data);
+                $sut = function () use ($data) {
+                    $this->manager->create($data);
                 };
 
                 expect($sut)->toThrow(new CreateSubscriptionException('First Billing Date cannot be in the past.'));
             });
 
             it('should throw an exception when user not found', function () {
-                $manager = new SubscriptionManager($this->gateway);
-
                 $data = [
                     'customer' => [
                         'id' => 'fakecustomer123',
@@ -133,16 +128,14 @@ describe('SubscriptionManager', function () {
                     ]
                 ];
 
-                $sut = function () use ($manager, $data) {
-                    $manager->create($data);
+                $sut = function () use ($data) {
+                    $this->manager->create($data);
                 };
 
                 expect($sut)->toThrow(new CustomerNotFoundException('Customer with id fakecustomer123 does not exist'));
             });
 
             it('should throw an exception when create payment method fails', function () {
-                $manager = new SubscriptionManager($this->gateway);
-
                 $data = [
                     'customer' => [
                         'id' => $this->customer->id,
@@ -155,8 +148,8 @@ describe('SubscriptionManager', function () {
                     ]
                 ];
 
-                $sut = function () use ($manager, $data) {
-                    $manager->create($data);
+                $sut = function () use ($data) {
+                    $this->manager->create($data);
                 };
 
                 expect($sut)->toThrow(new CreatePaymentMethodException('Unknown or expired payment_method_nonce.'));
@@ -170,8 +163,6 @@ describe('SubscriptionManager', function () {
         context('with a new user', function () {
 
             it('should create a subscription', function () {
-                $manager = new SubscriptionManager($this->gateway);
-
                 $data = [
                     'customer' => [
                         'firstName' => $this->faker->firstName,
@@ -186,15 +177,13 @@ describe('SubscriptionManager', function () {
                     ]
                 ];
 
-                $subscription = $manager->create($data);
+                $subscription = $this->manager->create($data);
 
                 expect($subscription->getId())->not->toBeFalsy();
                 expect($subscription->getGatewayCustomerId())->not->toBeFalsy();
             });
 
             it('should throw an exception if customer creation fails', function () {
-                $manager = new SubscriptionManager($this->gateway);
-
                 $data = [
                     'customer' => [
                         'firstName' => 'Timmy',
@@ -209,8 +198,8 @@ describe('SubscriptionManager', function () {
                     ]
                 ];
 
-                $sut = function () use ($manager, $data) {
-                    $manager->create($data);
+                $sut = function () use ($data) {
+                    $this->manager->create($data);
                 };
 
                 expect($sut)->toThrow(new CreateCustomerException('Unknown or expired payment_method_nonce.'));
