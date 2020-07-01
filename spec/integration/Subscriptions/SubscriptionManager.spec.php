@@ -52,7 +52,7 @@ describe('SubscriptionManager', function () {
                 $this->customer = $result->customer;
             });
 
-            fit('should create a subscription', function () {
+            it('should create a subscription', function () {
                 $manager = new SubscriptionManager($this->gateway);
 
                 $data = [
@@ -72,7 +72,7 @@ describe('SubscriptionManager', function () {
                 expect($subscription->getId())->not->toBeFalsy();
             });
 
-            fit('should create a subscription with a start date', function () {
+            it('should create a subscription with a start date', function () {
                 $manager = new SubscriptionManager($this->gateway);
                 $startDate = Carbon::tomorrow()->toDateString();
 
@@ -94,7 +94,7 @@ describe('SubscriptionManager', function () {
                 expect($subscription->getStartDate())->toBe($startDate);
             });
 
-            fit('should throw an exception when start date is invalid', function () {
+            it('should throw an exception when start date is invalid', function () {
                 $manager = new SubscriptionManager($this->gateway);
                 $startDate = Carbon::yesterday()->toDateString();
 
@@ -118,7 +118,7 @@ describe('SubscriptionManager', function () {
                 expect($sut)->toThrow(new CreateSubscriptionException('First Billing Date cannot be in the past.'));
             });
 
-            fit('should throw an exception when user not found', function () {
+            it('should throw an exception when user not found', function () {
                 $manager = new SubscriptionManager($this->gateway);
 
                 $data = [
@@ -140,7 +140,7 @@ describe('SubscriptionManager', function () {
                 expect($sut)->toThrow(new CustomerNotFoundException('Customer with id fakecustomer123 does not exist'));
             });
 
-            fit('should throw an exception when create payment method fails', function () {
+            it('should throw an exception when create payment method fails', function () {
                 $manager = new SubscriptionManager($this->gateway);
 
                 $data = [
@@ -169,7 +169,7 @@ describe('SubscriptionManager', function () {
 
         context('with a new user', function () {
 
-            fit('should create a subscription', function () {
+            it('should create a subscription', function () {
                 $manager = new SubscriptionManager($this->gateway);
 
                 $data = [
@@ -192,7 +192,7 @@ describe('SubscriptionManager', function () {
                 expect($subscription->getGatewayCustomerId())->not->toBeFalsy();
             });
 
-            fit('should throw an exception if customer creation fails', function () {
+            it('should throw an exception if customer creation fails', function () {
                 $manager = new SubscriptionManager($this->gateway);
 
                 $data = [
