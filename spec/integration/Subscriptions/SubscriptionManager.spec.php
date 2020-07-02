@@ -146,6 +146,63 @@ describe('SubscriptionManager', function () {
                 expect($discounts)->toHaveLength(1);
             });
 
+            it('should throw an exception when addOn is invalid', function () {
+                $startDate = Carbon::today()->subWeek()->toDateString();
+
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => '401y'
+                    ],
+                    'addOns' => [
+                        [
+                            'id' => 'this-addon-does-not-exist',
+                            'quantity' => '5'
+                        ]
+                    ]
+                ];
+
+                $sut = function () use ($data) {
+                    $this->manager->create($data);
+                };
+
+                expect($sut)->toThrow(new CreateSubscriptionException('Existing ID is invalid.'));
+            });
+
+            it('should throw an exception when discount is invalid', function () {
+                $startDate = Carbon::today()->subWeek()->toDateString();
+
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => '401y'
+                    ],
+                    'discounts' => [
+                    [
+                        'id' => 'very-bad-promo-code-that-does-not-exist',
+                        'amount' => '15.50',
+                        'billingCycles' => 1
+                    ]
+                ]
+                ];
+
+                $sut = function () use ($data) {
+                    $this->manager->create($data);
+                };
+
+                expect($sut)->toThrow(new CreateSubscriptionException('Inherited From ID is invalid.'));
+            });
+
             it('should throw an exception when start date is invalid', function () {
                 $startDate = Carbon::today()->subWeek()->toDateString();
 
