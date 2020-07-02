@@ -180,7 +180,7 @@ describe('SubscriptionManager', function () {
                 $subscription = $this->manager->create($data);
 
                 expect($subscription->getId())->not->toBeFalsy();
-                expect($subscription->getGatewayCustomerId())->not->toBeFalsy();
+                expect($subscription->getCustomerId())->not->toBeFalsy();
             });
 
             it('should throw an exception if customer creation fails', function () {

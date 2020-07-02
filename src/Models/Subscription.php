@@ -12,7 +12,7 @@ class Subscription
     /**
      * @var string
      */
-    protected string $gatewayCustomerId;
+    protected string $customerId;
 
     /**
      * @var string  Example: 2020-01-01
@@ -22,13 +22,13 @@ class Subscription
     /**
      * Subscription constructor.
      * @param string $id
-     * @param string $gatewayCustomerId
+     * @param string $customerId
      * @param string $startDate
      */
-    public function __construct(string $id, string $gatewayCustomerId, string $startDate)
+    public function __construct(string $id, string $customerId, string $startDate)
     {
         $this->id = $id;
-        $this->gatewayCustomerId = $gatewayCustomerId;
+        $this->customerId = $customerId;
         $this->startDate = $startDate;
     }
 
@@ -43,9 +43,9 @@ class Subscription
     /**
      * @return string
      */
-    public function getGatewayCustomerId(): string
+    public function getCustomerId(): string
     {
-        return $this->gatewayCustomerId;
+        return $this->customerId;
     }
 
     /**
