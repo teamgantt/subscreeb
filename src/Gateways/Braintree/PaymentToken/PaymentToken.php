@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways\Braintree;
+namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
 
 use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomer;
 
@@ -30,15 +30,15 @@ class PaymentToken
 
     /**
      * Get the value of customer
-     */ 
+     */
     public function getCustomer(): GatewayCustomer
     {
         return $this->customer;
     }
 
     /**
-     * Get the value of token
-     */ 
+     * Get the string value of the token
+     */
     public function getToken(): string
     {
         return $this->token;

@@ -2,7 +2,6 @@
 
 namespace TeamGantt\Subscreeb\Gateways;
 
-use Braintree\Exception\NotFound;
 use Braintree\Gateway as Braintree;
 use Carbon\Carbon;
 use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
@@ -10,14 +9,12 @@ use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\ConfigurationInterface;
-use TeamGantt\Subscreeb\Gateways\Braintree\PaymentTokenStrategyInterface;
+use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\{PaymentToken, Factory as PaymentTokenFactory};
 use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
 use TeamGantt\Subscreeb\Models\Adapters\BraintreeSubscriptionAdapter;
 use TeamGantt\Subscreeb\Models\AddOn\AddOn;
 use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
 use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomer;
-use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomerBuilderInterface;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
@@ -30,16 +27,15 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
     protected Braintree $gateway;
 
     /**
-     * @var PaymentTokenStrategyInterface
+     * @var PaymentTokenFactory
      */
-    protected PaymentTokenStrategyInterface $paymentTokens;
+    protected PaymentTokenFactory $paymentTokens;
 
     /**
      * BraintreeSubscriptionGateway constructor.
      * @param ConfigurationInterface $config
-     * @param PaymentTokenStrategyInterface $paymentTokens
      */
-    public function __construct(ConfigurationInterface $config, PaymentTokenStrategyInterface $paymentTokens)
+    public function __construct(ConfigurationInterface $config)
     {
         $this->gateway = new Braintree([
             'environment' => $config->getEnvironment(),
@@ -48,8 +44,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             'privateKey' => $config->getPrivateKey()
         ]);
 
-        $this->paymentTokens = $paymentTokens;
-        $this->paymentTokens->setGateway($this->gateway);
+        $this->paymentTokens = new PaymentTokenFactory($this->gateway);
     }
 
     /**
@@ -62,13 +57,11 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
      */
     public function create(Customer $customer, Payment $payment, Plan $plan, AddOnCollection $addOns): SubscriptionInterface
     {
-        $paymentToken = $this->paymentTokens->getPaymentToken($customer, $payment);
-        $token = $paymentToken->getToken();
-        $gatewayCustomer = $paymentToken->getCustomer();
-        return $this->createSubscription($gatewayCustomer, $plan, $addOns, $token);
+        $paymentToken = $this->paymentTokens->make($customer, $payment);
+        return $this->createSubscription($paymentToken, $plan, $addOns);
     }
 
-    protected function createSubscription(GatewayCustomer $gatewayCustomer, Plan $plan, AddOnCollection $addOns, string $paymentToken): SubscriptionInterface
+    protected function createSubscription(PaymentToken $token, Plan $plan, AddOnCollection $addOns): SubscriptionInterface
     {
         $planId = $plan->getId();
         $startDate = $plan->getStartDate()
@@ -85,7 +78,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
         $result = $this->gateway
             ->subscription()
             ->create([
-                'paymentMethodToken' => $paymentToken,
+                'paymentMethodToken' => $token->getToken(),
                 'planId' => $planId,
                 'firstBillingDate' => $startDate,
                 'addOns' => [
@@ -97,8 +90,6 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             throw new CreateSubscriptionException($result->message);
         }
 
-        return new BraintreeSubscriptionAdapter($result->subscription, $gatewayCustomer);
+        return new BraintreeSubscriptionAdapter($result->subscription, $token->getCustomer());
     }
-
-    
 }

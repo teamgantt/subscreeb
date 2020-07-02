@@ -74,4 +74,12 @@ class Customer
     {
         return $this->emailAddress;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isNew(): bool
+    {
+        return empty($this->id);
+    }
 }
