@@ -7,6 +7,8 @@ use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
 use TeamGantt\Subscreeb\Models\AddOn\AddOn;
 use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
 use TeamGantt\Subscreeb\Models\Customer;
+use TeamGantt\Subscreeb\Models\Discount\Discount;
+use TeamGantt\Subscreeb\Models\Discount\DiscountCollection;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
@@ -53,6 +55,14 @@ class SubscriptionManager
             $addOns->addAddon($addOn);
         }
 
-        return $this->gateway->create($customer, $payment, $plan, $addOns);
+
+        $discounts = new DiscountCollection();
+        $discountItems = $data['discounts'] ?? [];
+        foreach ($discountItems as $discountItem) {
+            $discount = new Discount($discountItem['id'], $discountItem['amount'], $discountItem['billingCycles']);
+            $discounts->addDiscount($discount);
+        }
+
+        return $this->gateway->create($customer, $payment, $plan, $addOns, $discounts);
     }
 }

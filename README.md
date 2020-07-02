@@ -40,7 +40,8 @@ $data = [
     ],
     'discount' => [
         'id' => 'discount-id',
-        'price' => 100.00
+        'amount' => 100.00,
+        'billingCycles' => 1
     ]
 
 ];

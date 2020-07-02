@@ -6,12 +6,14 @@ use Braintree\Gateway as Braintree;
 use Carbon\Carbon;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Gateways\Braintree\ConfigurationInterface;
-use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\{PaymentToken, Factory as PaymentTokenFactory};
+use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\{Factory as PaymentTokenFactory, PaymentToken};
 use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
 use TeamGantt\Subscreeb\Models\Adapters\BraintreeSubscriptionAdapter;
 use TeamGantt\Subscreeb\Models\AddOn\AddOn;
 use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
 use TeamGantt\Subscreeb\Models\Customer;
+use TeamGantt\Subscreeb\Models\Discount\Discount;
+use TeamGantt\Subscreeb\Models\Discount\DiscountCollection;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
@@ -47,20 +49,16 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
     /**
      * {@inheritDoc}
      *
-     * @param Customer $customer
-     * @param Payment $payment
-     * @param Plan $plan
-     * @param AddOnCollection $addOns
-     * @return SubscriptionInterface
      * @throws CreateSubscriptionException
      */
-    public function create(Customer $customer, Payment $payment, Plan $plan, AddOnCollection $addOns): SubscriptionInterface
+    public function create(Customer $customer, Payment $payment, Plan $plan, AddOnCollection $addOns, DiscountCollection $discounts): SubscriptionInterface
     {
         $paymentToken = $this->paymentTokens->make($customer, $payment);
-        return $this->createSubscription($paymentToken, $plan, $addOns);
+
+        return $this->createSubscription($paymentToken, $plan, $addOns, $discounts);
     }
 
-    protected function createSubscription(PaymentToken $token, Plan $plan, AddOnCollection $addOns): SubscriptionInterface
+    protected function createSubscription(PaymentToken $token, Plan $plan, AddOnCollection $addOns, DiscountCollection $discounts): SubscriptionInterface
     {
         $planId = $plan->getId();
         $startDate = $plan->getStartDate()
@@ -68,11 +66,19 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             : new Carbon();
 
         $addOnItems = array_map(function (AddOn $addOn) {
-            return  [
-               'existingId' => $addOn->getId(),
-               'quantity' => $addOn->getQuantity()
+            return [
+                'existingId' => $addOn->getId(),
+                'quantity' => $addOn->getQuantity()
             ];
         }, $addOns->getAddons());
+
+        $discountItems = array_map(function (Discount $discount) {
+            return [
+                'inheritedFromId' => $discount->getId(),
+                'amount' => $discount->getAmount(),
+                'numberOfBillingCycles' => $discount->getBillingCycles()
+            ];
+        }, $discounts->getDiscounts());
 
         $result = $this->gateway
             ->subscription()
@@ -82,6 +88,9 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
                 'firstBillingDate' => $startDate,
                 'addOns' => [
                     'update' => $addOnItems
+                ],
+                'discounts' => [
+                    'add' => $discountItems
                 ]
             ]);
 

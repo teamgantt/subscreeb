@@ -117,6 +117,35 @@ describe('SubscriptionManager', function () {
                 expect($addOns)->toHaveLength(1);
             });
 
+            it('should create a subscription with a discount', function () {
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => '400y',
+                    ],
+                    'discounts' => [
+                        [
+                            'id' => 'promo_discount',
+                            'amount' => '15.50',
+                            'billingCycles' => 1
+                        ]
+                    ]
+                ];
+
+                $subscription = $this->manager->create($data);
+                $discounts = $subscription->getDiscounts();
+
+                expect($discounts[0]->getId())->toBe('promo_discount');
+                expect($discounts[0]->getAmount())->toBe(15.50);
+                expect($discounts[0]->getBillingCycles())->toBe(1);
+                expect($discounts)->toHaveLength(1);
+            });
+
             it('should throw an exception when start date is invalid', function () {
                 $startDate = Carbon::today()->subWeek()->toDateString();
 

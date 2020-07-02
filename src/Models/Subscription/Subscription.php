@@ -25,18 +25,25 @@ class Subscription implements SubscriptionInterface
     protected array $addOns;
 
     /**
+     * @var array
+     */
+    protected array $discounts;
+
+    /**
      * Subscription constructor.
      * @param string $id
      * @param string $customerId
      * @param string $startDate
      * @param array $addOns
+     * @param array $discounts
      */
-    public function __construct(string $id, string $customerId, string $startDate, array $addOns)
+    public function __construct(string $id, string $customerId, string $startDate, array $addOns, array $discounts)
     {
         $this->id = $id;
         $this->customerId = $customerId;
         $this->startDate = $startDate;
         $this->addOns = $addOns;
+        $this->discounts = $discounts;
     }
 
     /**
@@ -69,5 +76,13 @@ class Subscription implements SubscriptionInterface
     public function getAddOns(): array
     {
         return $this->addOns;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDiscounts(): array
+    {
+        return $this->discounts;
     }
 }

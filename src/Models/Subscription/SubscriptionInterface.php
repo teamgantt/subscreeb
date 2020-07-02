@@ -23,4 +23,9 @@ interface SubscriptionInterface
      * @return array
      */
     public function getAddOns(): array;
+
+    /**
+     * @return array
+     */
+    public function getDiscounts(): array;
 }
