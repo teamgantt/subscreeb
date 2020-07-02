@@ -93,7 +93,7 @@ describe('SubscriptionManager', function () {
             });
 
             it('should throw an exception when start date is invalid', function () {
-                $startDate = Carbon::yesterday()->toDateString();
+                $startDate = Carbon::today()->subWeek()->toDateString();
 
                 $data = [
                     'customer' => [
