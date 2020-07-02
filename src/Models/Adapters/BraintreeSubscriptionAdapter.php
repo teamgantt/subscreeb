@@ -5,7 +5,7 @@ namespace TeamGantt\Subscreeb\Models\Adapters;
 use Braintree\Subscription;
 use Carbon\Carbon;
 use TeamGantt\Subscreeb\Models\AddOn\AddOn;
-use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomer;
+use TeamGantt\Subscreeb\Models\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
 class BraintreeSubscriptionAdapter implements SubscriptionInterface

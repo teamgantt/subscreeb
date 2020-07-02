@@ -4,10 +4,7 @@ namespace TeamGantt\Subscreeb\Gateways;
 
 use Braintree\Gateway as Braintree;
 use Carbon\Carbon;
-use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
-use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
-use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\ConfigurationInterface;
 use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\{PaymentToken, Factory as PaymentTokenFactory};
 use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
@@ -50,10 +47,12 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
     /**
      * {@inheritDoc}
      *
-     * @throws CreateCustomerException
-     * @throws CreatePaymentMethodException
+     * @param Customer $customer
+     * @param Payment $payment
+     * @param Plan $plan
+     * @param AddOnCollection $addOns
+     * @return SubscriptionInterface
      * @throws CreateSubscriptionException
-     * @throws CustomerNotFoundException
      */
     public function create(Customer $customer, Payment $payment, Plan $plan, AddOnCollection $addOns): SubscriptionInterface
     {

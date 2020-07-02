@@ -2,7 +2,7 @@
 
 namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
 
-use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomer;
+use TeamGantt\Subscreeb\Models\GatewayCustomer;
 
 class PaymentToken
 {

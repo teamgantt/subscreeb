@@ -6,7 +6,7 @@ use Braintree\Exception\NotFound;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomer;
+use TeamGantt\Subscreeb\Models\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Payment;
 
 class ExistingCustomerStrategy extends BaseStrategy
@@ -17,6 +17,8 @@ class ExistingCustomerStrategy extends BaseStrategy
      * @param Customer $customer
      * @param Payment $payment
      * @return PaymentToken
+     * @throws CreatePaymentMethodException
+     * @throws CustomerNotFoundException
      */
     public function getPaymentToken(Customer $customer, Payment $payment): PaymentToken
     {
@@ -29,6 +31,7 @@ class ExistingCustomerStrategy extends BaseStrategy
     /**
      * @param Customer $customer
      * @return GatewayCustomer
+     * @throws CustomerNotFoundException
      */
     protected function findGatewayCustomer(Customer $customer): GatewayCustomer
     {
@@ -51,6 +54,7 @@ class ExistingCustomerStrategy extends BaseStrategy
      * @param GatewayCustomer $customer
      * @param Payment $payment
      * @return string
+     * @throws CreatePaymentMethodException
      */
     protected function createPaymentMethod(GatewayCustomer $customer, Payment $payment): string
     {

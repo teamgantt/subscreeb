@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Models\GatewayCustomer;
+namespace TeamGantt\Subscreeb\Models;
 
 class GatewayCustomer
 {

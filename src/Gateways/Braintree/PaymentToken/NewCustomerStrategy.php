@@ -4,7 +4,7 @@ namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
 
 use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
 use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomer;
+use TeamGantt\Subscreeb\Models\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Payment;
 
 class NewCustomerStrategy extends BaseStrategy
@@ -15,6 +15,7 @@ class NewCustomerStrategy extends BaseStrategy
      * @param Customer $customer
      * @param Payment $payment
      * @return PaymentToken
+     * @throws CreateCustomerException
      */
     public function getPaymentToken(Customer $customer, Payment $payment): PaymentToken
     {
@@ -30,6 +31,7 @@ class NewCustomerStrategy extends BaseStrategy
      * @param Customer $customer
      * @param Payment $payment
      * @return GatewayCustomer
+     * @throws CreateCustomerException
      */
     protected function createGatewayCustomer(Customer $customer, Payment $payment): GatewayCustomer
     {

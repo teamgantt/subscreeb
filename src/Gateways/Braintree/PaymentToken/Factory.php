@@ -1,12 +1,8 @@
 <?php
 
-namespace Teamgantt\Subscreeb\Gateways\Braintree\PaymentToken;
+namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
 
 use Braintree\Gateway;
-use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\ExistingCustomerStrategy;
-use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\NewCustomerStrategy;
-use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\PaymentToken;
-use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\StrategyInterface;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Payment;
 
@@ -15,7 +11,7 @@ final class Factory
     /**
      * @var Gateway
      */
-    private $gateway;
+    private Gateway $gateway;
 
     /**
      * Factory constructor
