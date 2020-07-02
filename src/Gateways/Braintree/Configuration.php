@@ -1,8 +1,10 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways\Configuration;
+namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
-class BraintreeConfiguration implements BraintreeConfigurationInterface
+use TeamGantt\Subscreeb\Gateways\Braintree\ConfigurationInterface;
+
+class Configuration implements ConfigurationInterface
 {
     /**
      * @var string

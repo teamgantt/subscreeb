@@ -19,7 +19,7 @@ class GatewayCustomer
      * @param string $id
      * @param string $paymentToken
      */
-    public function __construct(string $id, string $paymentToken)
+    public function __construct(string $id, string $paymentToken = "")
     {
         $this->id = $id;
         $this->paymentToken = $paymentToken;

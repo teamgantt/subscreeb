@@ -8,8 +8,9 @@ use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
+use TeamGantt\Subscreeb\Gateways\Braintree\Configuration;
+use TeamGantt\Subscreeb\Gateways\Braintree\PaymentTokenStrategy;
 use TeamGantt\Subscreeb\Gateways\BraintreeSubscriptionGateway;
-use TeamGantt\Subscreeb\Gateways\Configuration\BraintreeConfiguration;
 use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomerBuilder;
 use TeamGantt\Subscreeb\Subscriptions\SubscriptionManager;
 
@@ -19,14 +20,14 @@ $dotenv->load();
 describe('SubscriptionManager', function () {
 
     beforeAll(function () {
-        $this->config = new BraintreeConfiguration(
+        $this->config = new Configuration(
             $_ENV['BRAINTREE_ENVIRONMENT'],
             $_ENV['BRAINTREE_MERCHANT_ID'],
             $_ENV['BRAINTREE_PUBLIC_KEY'],
             $_ENV['BRAINTREE_PRIVATE_KEY']
         );
 
-        $this->gateway = new BraintreeSubscriptionGateway($this->config, new GatewayCustomerBuilder());
+        $this->gateway = new BraintreeSubscriptionGateway($this->config, new PaymentTokenStrategy());
         $this->manager = new SubscriptionManager($this->gateway);
 
         $this->faker = \Faker\Factory::create();

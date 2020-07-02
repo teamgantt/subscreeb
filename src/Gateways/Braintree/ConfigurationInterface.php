@@ -1,8 +1,8 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways\Configuration;
+namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
-interface BraintreeConfigurationInterface
+interface ConfigurationInterface
 {
     /**
      * @return string
