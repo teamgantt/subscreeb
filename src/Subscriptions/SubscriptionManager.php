@@ -4,10 +4,12 @@ namespace TeamGantt\Subscreeb\Subscriptions;
 
 use Gateway;
 use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
+use TeamGantt\Subscreeb\Models\AddOn\AddOn;
+use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
-use TeamGantt\Subscreeb\Models\Subscription;
+use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
 class SubscriptionManager
 {
@@ -27,9 +29,9 @@ class SubscriptionManager
 
     /**
      * @param array $data
-     * @return Subscription
+     * @return SubscriptionInterface
      */
-    public function create(array $data): Subscription
+    public function create(array $data): SubscriptionInterface
     {
         // Validate structure of $data
         $customer = new Customer(
@@ -44,6 +46,13 @@ class SubscriptionManager
             $data['plan']['startDate'] ?? ''
         );
 
-        return $this->gateway->create($customer, $payment, $plan);
+        $addOns = new AddOnCollection();
+        $addOnItems = $data['addOns'] ?? [];
+        foreach ($addOnItems as $addOnItem) {
+            $addOn = new AddOn($addOnItem['id'], $addOnItem['quantity']);
+            $addOns->addAddon($addOn);
+        }
+
+        return $this->gateway->create($customer, $payment, $plan, $addOns);
     }
 }

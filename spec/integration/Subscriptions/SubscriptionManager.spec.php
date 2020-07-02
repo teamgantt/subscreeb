@@ -92,6 +92,32 @@ describe('SubscriptionManager', function () {
                 expect($subscription->getStartDate())->toBe($startDate);
             });
 
+            it('should create a subscription with an addOn', function () {
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => '400y',
+                    ],
+                    'addOns' => [
+                        [
+                            'id' => '400y-u',
+                            'quantity' => '5'
+                        ]
+                    ]
+                ];
+
+                $subscription = $this->manager->create($data);
+                $addOns = $subscription->getAddons();
+
+                expect($addOns[0]->getId())->toBe('400y-u');
+                expect($addOns)->toHaveLength(1);
+            });
+
             it('should throw an exception when start date is invalid', function () {
                 $startDate = Carbon::today()->subWeek()->toDateString();
 
@@ -156,7 +182,7 @@ describe('SubscriptionManager', function () {
             });
 
             afterAll(function () {
-               $this->braintree->customer()->delete($this->customer->id);
+                $this->braintree->customer()->delete($this->customer->id);
             });
         });
 

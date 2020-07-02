@@ -33,8 +33,8 @@ $data = [
         'id' => '401m',
         'startDate' => '2020-12-01',
     ],
-    'users' => [
-        'id' => 'user-id',
+    'addOns' => [
+        'id' => 'addOn-id',
         'quantity' => 5,
         'price' => 10.00
     ],

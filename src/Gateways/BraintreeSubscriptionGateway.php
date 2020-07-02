@@ -11,12 +11,15 @@ use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Configuration\BraintreeConfigurationInterface;
 use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
+use TeamGantt\Subscreeb\Models\Adapters\BraintreeSubscriptionAdapter;
+use TeamGantt\Subscreeb\Models\AddOn\AddOn;
+use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\GatewayCustomer\GatewayCustomerBuilderInterface;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
-use TeamGantt\Subscreeb\Models\Subscription;
+use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
 class BraintreeSubscriptionGateway implements SubscriptionGateway
 {
@@ -47,7 +50,16 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
         $this->gatewayCustomerBuilder = $gatewayCustomerBuilder;
     }
 
-    public function create(Customer $customer, Payment $payment, Plan $plan): Subscription
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws CreateCustomerException
+     * @throws CreatePaymentMethodException
+     * @throws CreateSubscriptionException
+     * @throws CustomerNotFoundException
+     */
+    public function create(Customer $customer, Payment $payment, Plan $plan, AddOnCollection $addOns): SubscriptionInterface
     {
         $customerId = $customer->getId();
         $paymentToken = null;
@@ -60,7 +72,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
             $paymentToken = $this->createPaymentMethod($gatewayCustomer, $payment);
         }
 
-        return $this->createSubscription($gatewayCustomer, $plan, $paymentToken);
+        return $this->createSubscription($gatewayCustomer, $plan, $addOns, $paymentToken);
     }
 
     protected function createGatewayCustomer(Customer $customer, Payment $payment): GatewayCustomer
@@ -106,30 +118,36 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
         return $result->paymentMethod->token;
     }
 
-    protected function createSubscription(GatewayCustomer $gatewayCustomer, Plan $plan, string $paymentToken): Subscription
+    protected function createSubscription(GatewayCustomer $gatewayCustomer, Plan $plan, AddOnCollection $addOns, string $paymentToken): SubscriptionInterface
     {
         $planId = $plan->getId();
         $startDate = $plan->getStartDate()
             ? new Carbon($plan->getStartDate())
             : new Carbon();
 
+        $addOnItems = array_map(function (AddOn $addOn) {
+            return  [
+               'existingId' => $addOn->getId(),
+               'quantity' => $addOn->getQuantity()
+            ];
+        }, $addOns->getAddons());
+
         $result = $this->gateway
             ->subscription()
             ->create([
                 'paymentMethodToken' => $paymentToken,
                 'planId' => $planId,
-                'firstBillingDate' => $startDate
+                'firstBillingDate' => $startDate,
+                'addOns' => [
+                    'update' => $addOnItems
+                ]
             ]);
 
         if (!$result->success) {
             throw new CreateSubscriptionException($result->message);
         }
 
-        $subscription = $result->subscription;
-        $subscriptionId = $subscription->id;
-        $subscriptionStartDate = new Carbon($subscription->firstBillingDate);
-
-        return new Subscription($subscriptionId, $gatewayCustomer->getId(), $subscriptionStartDate->toDateString());
+        return new BraintreeSubscriptionAdapter($result->subscription, $gatewayCustomer);
     }
 
     protected function findGatewayCustomer(Customer $customer): GatewayCustomer
