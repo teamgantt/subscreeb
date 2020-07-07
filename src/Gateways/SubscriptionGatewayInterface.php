@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways\Contracts;
+namespace TeamGantt\Subscreeb\Gateways;
 
 use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
 use TeamGantt\Subscreeb\Models\Customer;
@@ -9,7 +9,7 @@ use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
-interface SubscriptionGateway
+interface SubscriptionGatewayInterface
 {
     /**
      * Creates a new subscription.

@@ -3,8 +3,8 @@
 namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
 
 use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
+use TeamGantt\Subscreeb\Gateways\Braintree\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Payment;
 
 class NewCustomerStrategy extends BaseStrategy

@@ -1,14 +1,13 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways;
+namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
 use Braintree\Gateway as Braintree;
 use Carbon\Carbon;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
-use TeamGantt\Subscreeb\Gateways\Braintree\ConfigurationInterface;
+use TeamGantt\Subscreeb\Gateways\Braintree\Adapters\BraintreeSubscriptionAdapter;
 use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\{Factory as PaymentTokenFactory, PaymentToken};
-use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
-use TeamGantt\Subscreeb\Models\Adapters\BraintreeSubscriptionAdapter;
+use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
 use TeamGantt\Subscreeb\Models\AddOn\AddOn;
 use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
 use TeamGantt\Subscreeb\Models\Customer;
@@ -18,7 +17,7 @@ use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
-class BraintreeSubscriptionGateway implements SubscriptionGateway
+class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
 {
     /**
      * @var Braintree

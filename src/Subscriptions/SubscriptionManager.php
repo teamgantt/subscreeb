@@ -3,7 +3,7 @@
 namespace TeamGantt\Subscreeb\Subscriptions;
 
 use Gateway;
-use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
+use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
 use TeamGantt\Subscreeb\Models\AddOn\AddOn;
 use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
 use TeamGantt\Subscreeb\Models\Customer;
@@ -16,15 +16,15 @@ use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 class SubscriptionManager
 {
     /**
-     * @var SubscriptionGateway
+     * @var SubscriptionGatewayInterface
      */
-    protected SubscriptionGateway $gateway;
+    protected SubscriptionGatewayInterface $gateway;
 
     /**
      * SubscriptionManager constructor.
-     * @param SubscriptionGateway $gateway
+     * @param SubscriptionGatewayInterface $gateway
      */
-    public function __construct(SubscriptionGateway $gateway)
+    public function __construct(SubscriptionGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }

@@ -5,8 +5,8 @@ namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
 use Braintree\Exception\NotFound;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
+use TeamGantt\Subscreeb\Gateways\Braintree\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Payment;
 
 class ExistingCustomerStrategy extends BaseStrategy

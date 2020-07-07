@@ -8,8 +8,8 @@ use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
+use TeamGantt\Subscreeb\Gateways\Braintree\BraintreeSubscriptionGateway;
 use TeamGantt\Subscreeb\Gateways\Braintree\Configuration;
-use TeamGantt\Subscreeb\Gateways\BraintreeSubscriptionGateway;
 use TeamGantt\Subscreeb\Subscriptions\SubscriptionManager;
 
 $dotenv = Dotenv::createImmutable(dirname(__DIR__, 3));

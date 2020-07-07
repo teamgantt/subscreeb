@@ -1,14 +1,14 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Models\Adapters;
+namespace TeamGantt\Subscreeb\Gateways\Braintree\Adapters;
 
 use Braintree\AddOn as BraintreeAddon;
 use Braintree\Discount as BraintreeDiscount;
 use Braintree\Subscription;
 use Carbon\Carbon;
+use TeamGantt\Subscreeb\Gateways\Braintree\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\AddOn\AddOn;
 use TeamGantt\Subscreeb\Models\Discount\Discount;
-use TeamGantt\Subscreeb\Models\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
 class BraintreeSubscriptionAdapter implements SubscriptionInterface

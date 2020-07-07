@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Models;
+namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
 class GatewayCustomer
 {
