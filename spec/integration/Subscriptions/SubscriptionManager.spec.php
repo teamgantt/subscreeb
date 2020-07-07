@@ -146,6 +146,28 @@ describe('SubscriptionManager', function () {
                 expect($discounts)->toHaveLength(1);
             });
 
+            it('should throw an exception when plan id is invalid', function () {
+                $startDate = Carbon::today()->subWeek()->toDateString();
+
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => 'plan-id-that-doesn-not-exist'
+                    ],
+                ];
+
+                $sut = function () use ($data) {
+                    $this->manager->create($data);
+                };
+
+                expect($sut)->toThrow(new CreateSubscriptionException('Plan ID is invalid.'));
+            });
+
             it('should throw an exception when addOn is invalid', function () {
                 $startDate = Carbon::today()->subWeek()->toDateString();
 
