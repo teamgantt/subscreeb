@@ -61,7 +61,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '401m',
+                        'id' => 'test-plan-a-monthly',
                     ]
                 ];
 
@@ -81,7 +81,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '400y',
+                        'id' => 'test-plan-a-yearly',
                         'startDate' => $startDate
                     ]
                 ];
@@ -100,11 +100,11 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '400y',
+                        'id' => 'test-plan-b-monthly',
                     ],
                     'addOns' => [
                         [
-                            'id' => '400y-u',
+                            'id' => 'test-plan-b-monthly-user',
                             'quantity' => '5'
                         ]
                     ]
@@ -113,7 +113,7 @@ describe('SubscriptionManager', function () {
                 $subscription = $this->manager->create($data);
                 $addOns = $subscription->getAddons();
 
-                expect($addOns[0]->getId())->toBe('400y-u');
+                expect($addOns[0]->getId())->toBe('test-plan-b-monthly-user');
                 expect($addOns)->toHaveLength(1);
             });
 
@@ -126,11 +126,11 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '400y',
+                        'id' => 'test-plan-b-yearly',
                     ],
                     'discounts' => [
                         [
-                            'id' => 'promo_discount',
+                            'id' => 'test-discount',
                             'amount' => '15.50',
                             'billingCycles' => 1
                         ]
@@ -140,7 +140,7 @@ describe('SubscriptionManager', function () {
                 $subscription = $this->manager->create($data);
                 $discounts = $subscription->getDiscounts();
 
-                expect($discounts[0]->getId())->toBe('promo_discount');
+                expect($discounts[0]->getId())->toBe('test-discount');
                 expect($discounts[0]->getAmount())->toBe(15.50);
                 expect($discounts[0]->getBillingCycles())->toBe(1);
                 expect($discounts)->toHaveLength(1);
@@ -157,7 +157,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '401y'
+                        'id' => 'test-plan-a-monthly'
                     ],
                     'addOns' => [
                         [
@@ -171,7 +171,7 @@ describe('SubscriptionManager', function () {
                     $this->manager->create($data);
                 };
 
-                expect($sut)->toThrow(new CreateSubscriptionException('Existing ID is invalid.'));
+                expect($sut)->toThrow(new CreateSubscriptionException('Inherited From ID is invalid.'));
             });
 
             it('should throw an exception when discount is invalid', function () {
@@ -185,7 +185,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '401y'
+                        'id' => 'test-plan-a-monthly'
                     ],
                     'discounts' => [
                     [
@@ -214,7 +214,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '401y',
+                        'id' => 'test-plan-a-monthly',
                         'startDate' => $startDate
                     ]
                 ];
@@ -235,7 +235,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '401m',
+                        'id' => 'test-plan-a-monthly',
                     ]
                 ];
 
@@ -255,7 +255,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'bad-nonce'
                     ],
                     'plan' => [
-                        'id' => '401m',
+                        'id' => 'test-plan-a-monthly',
                     ]
                 ];
 
@@ -264,10 +264,6 @@ describe('SubscriptionManager', function () {
                 };
 
                 expect($sut)->toThrow(new CreatePaymentMethodException('Unknown or expired payment_method_nonce.'));
-            });
-
-            afterAll(function () {
-                $this->braintree->customer()->delete($this->customer->id);
             });
         });
 
@@ -284,7 +280,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => '401y',
+                        'id' => 'test-plan-a-yearly',
                     ]
                 ];
 
@@ -305,7 +301,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'bad-nonce'
                     ],
                     'plan' => [
-                        'id' => '401y',
+                        'id' => 'test-plan-a-yearly',
                     ]
                 ];
 

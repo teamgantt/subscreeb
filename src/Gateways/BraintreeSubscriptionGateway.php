@@ -67,7 +67,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
 
         $addOnItems = array_map(function (AddOn $addOn) {
             return [
-                'existingId' => $addOn->getId(),
+                'inheritedFromId' => $addOn->getId(),
                 'quantity' => $addOn->getQuantity()
             ];
         }, $addOns->getAddons());
@@ -87,7 +87,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGateway
                 'planId' => $planId,
                 'firstBillingDate' => $startDate,
                 'addOns' => [
-                    'update' => $addOnItems
+                    'add' => $addOnItems
                 ],
                 'discounts' => [
                     'add' => $discountItems
