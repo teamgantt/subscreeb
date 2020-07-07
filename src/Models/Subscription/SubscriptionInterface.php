@@ -2,6 +2,8 @@
 
 namespace TeamGantt\Subscreeb\Models\Subscription;
 
+use TeamGantt\Subscreeb\Models\AddOn;
+
 interface SubscriptionInterface
 {
     /**
@@ -20,12 +22,12 @@ interface SubscriptionInterface
     public function getStartDate(): string;
 
     /**
-     * @return array
+     * @return array<AddOn>
      */
     public function getAddOns(): array;
 
     /**
-     * @return array
+     * @return array<Addon>
      */
     public function getDiscounts(): array;
 }

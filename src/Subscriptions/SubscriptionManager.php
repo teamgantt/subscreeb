@@ -4,11 +4,9 @@ namespace TeamGantt\Subscreeb\Subscriptions;
 
 use Gateway;
 use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
-use TeamGantt\Subscreeb\Models\AddOn\AddOn;
-use TeamGantt\Subscreeb\Models\AddOn\AddOnCollection;
+use TeamGantt\Subscreeb\Models\AddOn;
 use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\Discount\Discount;
-use TeamGantt\Subscreeb\Models\Discount\DiscountCollection;
+use TeamGantt\Subscreeb\Models\Discount;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
@@ -48,19 +46,14 @@ class SubscriptionManager
             $data['plan']['startDate'] ?? ''
         );
 
-        $addOns = new AddOnCollection();
-        $addOnItems = $data['addOns'] ?? [];
-        foreach ($addOnItems as $addOnItem) {
-            $addOn = new AddOn($addOnItem['id'], $addOnItem['quantity']);
-            $addOns->addAddon($addOn);
+        $addOns = [];
+        foreach (($data['addOns'] ?? []) as $addOnItem) {
+            $addOns[] = new AddOn($addOnItem['id'], $addOnItem['quantity']);
         }
 
-
-        $discounts = new DiscountCollection();
-        $discountItems = $data['discounts'] ?? [];
-        foreach ($discountItems as $discountItem) {
-            $discount = new Discount($discountItem['id'], $discountItem['amount'], $discountItem['billingCycles']);
-            $discounts->addDiscount($discount);
+        $discounts = [];
+        foreach (($data['discounts'] ?? []) as $discountItem) {
+            $discounts[] = new Discount($discountItem['id'], $discountItem['amount'], $discountItem['billingCycles']);
         }
 
         return $this->gateway->create($customer, $payment, $plan, $addOns, $discounts);

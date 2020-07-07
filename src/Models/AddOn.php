@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Models\AddOn;
+namespace TeamGantt\Subscreeb\Models;
 
 class AddOn
 {

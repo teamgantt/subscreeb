@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Models\Discount;
+namespace TeamGantt\Subscreeb\Models;
 
 class Discount
 {

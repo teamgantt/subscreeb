@@ -2,13 +2,13 @@
 
 namespace TeamGantt\Subscreeb\Gateways\Braintree\Adapters;
 
-use Braintree\AddOn as BraintreeAddon;
+use Braintree\AddOn as BraintreeAddOn;
 use Braintree\Discount as BraintreeDiscount;
 use Braintree\Subscription;
 use Carbon\Carbon;
 use TeamGantt\Subscreeb\Gateways\Braintree\GatewayCustomer;
-use TeamGantt\Subscreeb\Models\AddOn\AddOn;
-use TeamGantt\Subscreeb\Models\Discount\Discount;
+use TeamGantt\Subscreeb\Models\AddOn;
+use TeamGantt\Subscreeb\Models\Discount;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
 class BraintreeSubscriptionAdapter implements SubscriptionInterface
@@ -63,7 +63,7 @@ class BraintreeSubscriptionAdapter implements SubscriptionInterface
      */
     public function getAddOns(): array
     {
-        return array_map(function (BraintreeAddon $addOnItem) {
+        return array_map(function (BraintreeAddOn $addOnItem) {
             return new AddOn($addOnItem->id, $addOnItem->quantity ?? 0);
         }, $this->subscription->addOns);
     }
