@@ -3,6 +3,8 @@
 namespace TeamGantt\Subscreeb\Models\Subscription;
 
 use TeamGantt\Subscreeb\Models\Customer;
+use TeamGantt\Subscreeb\Models\Payment;
+use TeamGantt\Subscreeb\Models\Plan;
 
 class Subscription implements SubscriptionInterface
 {
@@ -17,11 +19,6 @@ class Subscription implements SubscriptionInterface
     protected Customer $customer;
 
     /**
-     * @var string  Example: 2020-01-01
-     */
-    protected string $startDate;
-
-    /**
      * @var array
      */
     protected array $addOns;
@@ -32,24 +29,36 @@ class Subscription implements SubscriptionInterface
     protected array $discounts;
 
     /**
+     * @var Payment
+     */
+    protected Payment $payment;
+
+    /**
+     * @var Plan
+     */
+    protected Plan $plan;
+
+    /**
      * Subscription constructor.
      * @param string $id
      * @param Customer $customer
-     * @param string $startDate
+     * @param Payment $payment
+     * @param Plan $plan
      * @param array $addOns
      * @param array $discounts
      */
-    public function __construct(string $id, Customer $customer, string $startDate, array $addOns, array $discounts)
+    public function __construct(string $id, Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts)
     {
         $this->id = $id;
         $this->customer = $customer;
-        $this->startDate = $startDate;
+        $this->payment = $payment;
+        $this->plan = $plan;
         $this->addOns = $addOns;
         $this->discounts = $discounts;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getId(): string
     {
@@ -57,7 +66,7 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCustomer(): Customer
     {
@@ -65,15 +74,23 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function getStartDate(): string
+    public function getPayment(): Payment
     {
-        return $this->startDate;
+        return $this->getPayment();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     */
+    public function getPlan(): Plan
+    {
+        return $this->plan;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getAddOns(): array
     {
@@ -81,7 +98,7 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getDiscounts(): array
     {

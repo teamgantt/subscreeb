@@ -88,7 +88,9 @@ describe('SubscriptionManager', function () {
 
                 $subscription = $this->manager->create($data);
 
-                expect($subscription->getStartDate())->toBe($startDate);
+                print_r($subscription);
+
+                expect($subscription->getPlan()->getStartDate())->toBe($startDate);
             });
 
             it('should create a subscription with an addOn', function () {

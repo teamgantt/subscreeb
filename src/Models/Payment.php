@@ -19,7 +19,7 @@ class Payment
      * @param string $nonce
      * @param string $token
      */
-    public function __construct(string $nonce, string $token = '')
+    public function __construct(string $nonce = '', string $token = '')
     {
         $this->nonce = $nonce;
         $this->token = $token;

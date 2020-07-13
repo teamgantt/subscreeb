@@ -33,6 +33,12 @@ class SubscriptionManager
      */
     public function create(array $data): SubscriptionInterface
     {
+        // $subscriptionBuilder = new Subscription($data);
+        // $builder->withCustomer();
+
+        // $builder->customerFromKey('customer');
+        // Subscription $subscription = $builder->build($data);
+
         $customer = new Customer(
             $data['customer']['id'] ?? '',
             $data['customer']['firstName'] ?? '',

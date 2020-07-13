@@ -4,6 +4,8 @@ namespace TeamGantt\Subscreeb\Models\Subscription;
 
 use TeamGantt\Subscreeb\Models\AddOn;
 use TeamGantt\Subscreeb\Models\Customer;
+use TeamGantt\Subscreeb\Models\Payment;
+use TeamGantt\Subscreeb\Models\Plan;
 
 interface SubscriptionInterface
 {
@@ -18,9 +20,14 @@ interface SubscriptionInterface
     public function getCustomer(): Customer;
 
     /**
-     * @return string
+     * @return Payment
      */
-    public function getStartDate(): string;
+    public function getPayment(): Payment;
+
+    /**
+     * @return Plan
+     */
+    public function getPlan(): Plan;
 
     /**
      * @return array<AddOn>

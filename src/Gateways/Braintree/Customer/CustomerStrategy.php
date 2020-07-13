@@ -21,7 +21,7 @@ class CustomerStrategy extends BaseStrategy
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function savePaymentToken(Customer $customer, Payment $payment): Customer
     {

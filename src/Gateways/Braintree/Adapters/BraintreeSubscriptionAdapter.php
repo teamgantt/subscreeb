@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use TeamGantt\Subscreeb\Models\AddOn;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Discount;
+use TeamGantt\Subscreeb\Models\Payment;
+use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
 class BraintreeSubscriptionAdapter implements SubscriptionInterface
@@ -24,6 +26,16 @@ class BraintreeSubscriptionAdapter implements SubscriptionInterface
     protected Customer $customer;
 
     /**
+     * @var Plan
+     */
+    protected Plan $plan;
+
+    /**
+     * @var Payment
+     */
+    protected Payment $payment;
+
+    /**
      * BraintreeSubscriptionAdapter constructor.
      * @param Subscription $subscription
      * @param Customer $customer
@@ -32,10 +44,14 @@ class BraintreeSubscriptionAdapter implements SubscriptionInterface
     {
         $this->subscription = $subscription;
         $this->customer = $customer;
+
+        $this->payment = new Payment('', $subscription->paymentMethodToken);
+
+        $this->plan = new Plan($subscription->planId, Carbon::instance($this->subscription->firstBillingDate)->toDateString());
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getId(): string
     {
@@ -43,7 +59,7 @@ class BraintreeSubscriptionAdapter implements SubscriptionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCustomer(): Customer
     {
@@ -51,15 +67,23 @@ class BraintreeSubscriptionAdapter implements SubscriptionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function getStartDate(): string
+    public function getPayment(): Payment
     {
-        return Carbon::instance($this->subscription->firstBillingDate)->toDateString();
+        return $this->payment;
     }
 
     /**
-     * @inheritDoc
+     * @return Plan
+     */
+    public function getPlan(): Plan
+    {
+        return $this->plan;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getAddOns(): array
     {
@@ -69,7 +93,7 @@ class BraintreeSubscriptionAdapter implements SubscriptionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getDiscounts(): array
     {
