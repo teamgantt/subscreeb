@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use DateTime;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Gateways\Braintree\Adapters\BraintreeSubscriptionAdapter;
-use TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken\{Factory as PaymentTokenFactory, PaymentToken};
+use TeamGantt\Subscreeb\Gateways\Braintree\Customer\CustomerStrategy;
 use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
 use TeamGantt\Subscreeb\Models\AddOn;
 use TeamGantt\Subscreeb\Models\Customer;
@@ -24,9 +24,9 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
     protected Braintree $gateway;
 
     /**
-     * @var PaymentTokenFactory
+     * @var CustomerStrategy
      */
-    protected PaymentTokenFactory $paymentTokens;
+    protected CustomerStrategy $customerStrategy;
 
     /**
      * BraintreeSubscriptionGateway constructor.
@@ -41,7 +41,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
             'privateKey' => $config->getPrivateKey()
         ]);
 
-        $this->paymentTokens = new PaymentTokenFactory($this->gateway);
+        $this->customerStrategy = new CustomerStrategy($this->gateway);
     }
 
     /**
@@ -51,9 +51,9 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
      */
     public function create(Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts): SubscriptionInterface
     {
-        $paymentToken = $this->paymentTokens->make($customer, $payment);
+        $customer = $this->customerStrategy->savePaymentToken($customer, $payment);
 
-        return $this->createSubscription($paymentToken, $plan, $addOns, $discounts);
+        return $this->createSubscription($customer, $plan, $addOns, $discounts);
     }
 
     public function getAddOns(array $addOns): array
@@ -84,14 +84,14 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
             : new Carbon();
     }
 
-    protected function createSubscription(PaymentToken $token, Plan $plan, array $addOns, array $discounts): SubscriptionInterface
+    protected function createSubscription(Customer $customer, Plan $plan, array $addOns, array $discounts): SubscriptionInterface
     {
         $planId = $plan->getId();
 
         $result = $this->gateway
             ->subscription()
             ->create([
-                'paymentMethodToken' => $token->getToken(),
+                'paymentMethodToken' => $customer->getPaymentToken(),
                 'planId' => $planId,
                 'firstBillingDate' => $this->getStartDate($plan),
                 'addOns' => [
@@ -106,6 +106,6 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
             throw new CreateSubscriptionException($result->message);
         }
 
-        return new BraintreeSubscriptionAdapter($result->subscription, $token->getCustomer());
+        return new BraintreeSubscriptionAdapter($result->subscription, $customer);
     }
 }

@@ -33,13 +33,13 @@ class SubscriptionManager
      */
     public function create(array $data): SubscriptionInterface
     {
-        // Validate structure of $data
         $customer = new Customer(
             $data['customer']['id'] ?? '',
             $data['customer']['firstName'] ?? '',
             $data['customer']['lastName'] ?? '',
             $data['customer']['emailAddress'] ?? ''
         );
+
         $payment = new Payment($data['payment']['nonce']);
         $plan = new Plan(
             $data['plan']['id'],

@@ -2,6 +2,8 @@
 
 namespace TeamGantt\Subscreeb\Models\Subscription;
 
+use TeamGantt\Subscreeb\Models\Customer;
+
 class Subscription implements SubscriptionInterface
 {
     /**
@@ -10,9 +12,9 @@ class Subscription implements SubscriptionInterface
     protected string $id;
 
     /**
-     * @var string
+     * @var Customer
      */
-    protected string $customerId;
+    protected Customer $customer;
 
     /**
      * @var string  Example: 2020-01-01
@@ -32,15 +34,15 @@ class Subscription implements SubscriptionInterface
     /**
      * Subscription constructor.
      * @param string $id
-     * @param string $customerId
+     * @param Customer $customer
      * @param string $startDate
      * @param array $addOns
      * @param array $discounts
      */
-    public function __construct(string $id, string $customerId, string $startDate, array $addOns, array $discounts)
+    public function __construct(string $id, Customer $customer, string $startDate, array $addOns, array $discounts)
     {
         $this->id = $id;
-        $this->customerId = $customerId;
+        $this->customer = $customer;
         $this->startDate = $startDate;
         $this->addOns = $addOns;
         $this->discounts = $discounts;
@@ -57,9 +59,9 @@ class Subscription implements SubscriptionInterface
     /**
      * @inheritDoc
      */
-    public function getCustomerId(): string
+    public function getCustomer(): Customer
     {
-        return $this->customerId;
+        return $this->customer;
     }
 
     /**

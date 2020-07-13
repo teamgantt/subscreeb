@@ -6,8 +6,8 @@ use Braintree\AddOn as BraintreeAddOn;
 use Braintree\Discount as BraintreeDiscount;
 use Braintree\Subscription;
 use Carbon\Carbon;
-use TeamGantt\Subscreeb\Gateways\Braintree\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\AddOn;
+use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Discount;
 use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
 
@@ -19,16 +19,16 @@ class BraintreeSubscriptionAdapter implements SubscriptionInterface
     protected Subscription $subscription;
 
     /**
-     * @var GatewayCustomer
+     * @var Customer
      */
-    protected GatewayCustomer $customer;
+    protected Customer $customer;
 
     /**
      * BraintreeSubscriptionAdapter constructor.
      * @param Subscription $subscription
-     * @param GatewayCustomer $customer
+     * @param Customer $customer
      */
-    public function __construct(Subscription $subscription, GatewayCustomer $customer)
+    public function __construct(Subscription $subscription, Customer $customer)
     {
         $this->subscription = $subscription;
         $this->customer = $customer;
@@ -45,9 +45,9 @@ class BraintreeSubscriptionAdapter implements SubscriptionInterface
     /**
      * @inheritDoc
      */
-    public function getCustomerId(): string
+    public function getCustomer(): Customer
     {
-        return $this->customer->getId();
+        return $this->customer;
     }
 
     /**

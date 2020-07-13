@@ -1,11 +1,10 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
+namespace TeamGantt\Subscreeb\Gateways\Braintree\Customer;
 
 use Braintree\Exception\NotFound;
 use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
-use TeamGantt\Subscreeb\Gateways\Braintree\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Payment;
 
@@ -16,47 +15,41 @@ class ExistingCustomerStrategy extends BaseStrategy
      *
      * @param Customer $customer
      * @param Payment $payment
-     * @return PaymentToken
+     * @return Customer
      * @throws CreatePaymentMethodException
      * @throws CustomerNotFoundException
      */
-    public function getPaymentToken(Customer $customer, Payment $payment): PaymentToken
+    public function savePaymentToken(Customer $customer, Payment $payment): Customer
     {
-        $gatewayCustomer = $this->findGatewayCustomer($customer);
-        $paymentToken = $this->createPaymentMethod($gatewayCustomer, $payment);
+        $this->verifyCustomer($customer);
+        $payment = $this->createPaymentMethod($customer, $payment);
 
-        return new PaymentToken($paymentToken, $gatewayCustomer);
+        return $customer->setPayment($payment);
     }
 
     /**
      * @param Customer $customer
-     * @return GatewayCustomer
+     * @return void
      * @throws CustomerNotFoundException
      */
-    protected function findGatewayCustomer(Customer $customer): GatewayCustomer
+    protected function verifyCustomer(Customer $customer): void
     {
-        $gatewayCustomer = null;
-
         try {
-            $gatewayCustomer = $this->gateway
+            $this->gateway
                 ->customer()
                 ->find($customer->getId());
         } catch (NotFound $e) {
             throw new CustomerNotFoundException("Customer with id {$customer->getId()} does not exist");
         }
-
-        $customerId = $gatewayCustomer->id; // @phpstan-ignore-line
-
-        return new GatewayCustomer($customerId);
     }
 
     /**
-     * @param GatewayCustomer $customer
+     * @param Customer $customer
      * @param Payment $payment
-     * @return string
+     * @return Payment
      * @throws CreatePaymentMethodException
      */
-    protected function createPaymentMethod(GatewayCustomer $customer, Payment $payment): string
+    protected function createPaymentMethod(Customer $customer, Payment $payment): Payment
     {
         $result = $this->gateway
             ->paymentMethod()
@@ -72,6 +65,6 @@ class ExistingCustomerStrategy extends BaseStrategy
             throw new CreatePaymentMethodException($result->message);
         }
 
-        return $result->paymentMethod->token;
+        return $payment->setToken($result->paymentMethod->token);
     }
 }

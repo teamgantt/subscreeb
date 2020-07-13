@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
+namespace TeamGantt\Subscreeb\Gateways\Braintree\Customer;
 
 use Braintree\Gateway;
 

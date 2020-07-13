@@ -3,6 +3,7 @@
 namespace TeamGantt\Subscreeb\Models\Subscription;
 
 use TeamGantt\Subscreeb\Models\AddOn;
+use TeamGantt\Subscreeb\Models\Customer;
 
 interface SubscriptionInterface
 {
@@ -12,9 +13,9 @@ interface SubscriptionInterface
     public function getId(): string;
 
     /**
-     * @return string
+     * @return Customer
      */
-    public function getCustomerId(): string;
+    public function getCustomer(): Customer;
 
     /**
      * @return string

@@ -29,6 +29,11 @@ class Customer
     protected string $emailAddress;
 
     /**
+     * @var Payment
+     */
+    protected Payment $payment;
+
+    /**
      * Customer constructor.
      * @param string $id
      * @param string $firstName
@@ -76,10 +81,37 @@ class Customer
     }
 
     /**
+     * @return string
+     */
+    public function getPaymentToken(): string
+    {
+        return $this->getPayment()->getToken();
+    }
+
+    /**
      * @return boolean
      */
     public function isNew(): bool
     {
         return empty($this->id);
+    }
+
+    /**
+     * @return Payment
+     */
+    public function getPayment(): Payment
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param Payment $payment
+     * @return Customer
+     */
+    public function setPayment(Payment $payment): self
+    {
+        $this->payment = $payment;
+
+        return $this;
     }
 }

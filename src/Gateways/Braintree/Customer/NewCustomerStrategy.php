@@ -1,9 +1,8 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways\Braintree\PaymentToken;
+namespace TeamGantt\Subscreeb\Gateways\Braintree\Customer;
 
 use TeamGantt\Subscreeb\Exceptions\CreateCustomerException;
-use TeamGantt\Subscreeb\Gateways\Braintree\GatewayCustomer;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Payment;
 
@@ -14,15 +13,12 @@ class NewCustomerStrategy extends BaseStrategy
      *
      * @param Customer $customer
      * @param Payment $payment
-     * @return PaymentToken
+     * @return Customer
      * @throws CreateCustomerException
      */
-    public function getPaymentToken(Customer $customer, Payment $payment): PaymentToken
+    public function savePaymentToken(Customer $customer, Payment $payment): Customer
     {
-        $gatewayCustomer = $this->createGatewayCustomer($customer, $payment);
-        $paymentToken = $gatewayCustomer->getPaymentToken();
-
-        return new PaymentToken($paymentToken, $gatewayCustomer);
+        return $this->saveCustomer($customer, $payment);
     }
 
     /**
@@ -30,10 +26,10 @@ class NewCustomerStrategy extends BaseStrategy
      *
      * @param Customer $customer
      * @param Payment $payment
-     * @return GatewayCustomer
+     * @return Customer
      * @throws CreateCustomerException
      */
-    protected function createGatewayCustomer(Customer $customer, Payment $payment): GatewayCustomer
+    protected function saveCustomer(Customer $customer, Payment $payment): Customer
     {
         $result = $this->gateway
             ->customer()
@@ -50,7 +46,9 @@ class NewCustomerStrategy extends BaseStrategy
 
         $customerId = $result->customer->id; // @phpstan-ignore-line
         $paymentToken = $result->customer->paymentMethods[0]->token; // @phpstan-ignore-line
+        $payment->setToken($paymentToken);
 
-        return new GatewayCustomer($customerId, $paymentToken);
+        $customer = new Customer($customerId, $customer->getFirstName(), $customer->getLastName(), $customer->getEmailAddress());
+        return $customer->setPayment($payment);
     }
 }
