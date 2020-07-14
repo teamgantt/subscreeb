@@ -78,7 +78,7 @@ class Subscription implements SubscriptionInterface
      */
     public function getPayment(): Payment
     {
-        return $this->getPayment();
+        return $this->payment;
     }
 
     /**

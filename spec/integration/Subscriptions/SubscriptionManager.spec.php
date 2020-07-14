@@ -88,8 +88,6 @@ describe('SubscriptionManager', function () {
 
                 $subscription = $this->manager->create($data);
 
-                print_r($subscription);
-
                 expect($subscription->getPlan()->getStartDate())->toBe($startDate);
             });
 
