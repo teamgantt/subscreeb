@@ -27,5 +27,4 @@ class CustomerStrategy extends BaseStrategy
 
         return new ExistingCustomerStrategy($this->gateway);
     }
-
 }

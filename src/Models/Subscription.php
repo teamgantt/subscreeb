@@ -54,7 +54,7 @@ class Subscription
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getId(): string
     {
@@ -62,7 +62,7 @@ class Subscription
     }
 
     /**
-     * {@inheritDoc}
+     * @return Customer
      */
     public function getCustomer(): Customer
     {
@@ -70,7 +70,7 @@ class Subscription
     }
 
     /**
-     * {@inheritDoc}
+     * @return Payment
      */
     public function getPayment(): Payment
     {
@@ -78,7 +78,7 @@ class Subscription
     }
 
     /**
-     * {@inheritDoc}
+     * @return Plan
      */
     public function getPlan(): Plan
     {
@@ -86,7 +86,7 @@ class Subscription
     }
 
     /**
-     * {@inheritDoc}
+     * @return array
      */
     public function getAddOns(): array
     {
@@ -94,10 +94,18 @@ class Subscription
     }
 
     /**
-     * {@inheritDoc}
+     * @return array
      */
     public function getDiscounts(): array
     {
         return $this->discounts;
+    }
+
+    /**
+     * @param Customer $customer
+     */
+    public function setCustomer(Customer $customer): void
+    {
+        $this->customer = $customer;
     }
 }
