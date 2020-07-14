@@ -8,10 +8,18 @@ use TeamGantt\Subscreeb\Models\Payment;
 class CustomerStrategy extends BaseStrategy
 {
     /**
+     * {@inheritDoc}
+     */
+    public function savePaymentToken(Customer $customer, Payment $payment): Customer
+    {
+        return $this->getStrategy($customer)->savePaymentToken($customer, $payment);
+    }
+
+    /**
      * @param Customer $customer
      * @return StrategyInterface
      */
-    private function getStrategy(Customer $customer): StrategyInterface
+    protected function getStrategy(Customer $customer): StrategyInterface
     {
         if ($customer->isNew()) {
             return new NewCustomerStrategy($this->gateway);
@@ -20,11 +28,4 @@ class CustomerStrategy extends BaseStrategy
         return new ExistingCustomerStrategy($this->gateway);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function savePaymentToken(Customer $customer, Payment $payment): Customer
-    {
-        return $this->getStrategy($customer)->savePaymentToken($customer, $payment);
-    }
 }
