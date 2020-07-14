@@ -3,7 +3,7 @@
 namespace TeamGantt\Subscreeb\Subscriptions;
 
 use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
-use TeamGantt\Subscreeb\Models\Subscription\SubscriptionInterface;
+use TeamGantt\Subscreeb\Models\Subscription;
 
 class SubscriptionManager
 {
@@ -29,9 +29,9 @@ class SubscriptionManager
 
     /**
      * @param array $request
-     * @return SubscriptionInterface
+     * @return Subscription
      */
-    public function create(array $request): SubscriptionInterface
+    public function create(array $request): Subscription
     {
         $subscription = $this->requestMapper->map($request);
 

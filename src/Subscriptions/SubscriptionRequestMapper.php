@@ -7,7 +7,7 @@ use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Discount;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
-use TeamGantt\Subscreeb\Models\Subscription\Subscription;
+use TeamGantt\Subscreeb\Models\Subscription;
 
 class SubscriptionRequestMapper
 {

@@ -1,12 +1,8 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Models\Subscription;
+namespace TeamGantt\Subscreeb\Models;
 
-use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\Payment;
-use TeamGantt\Subscreeb\Models\Plan;
-
-class Subscription implements SubscriptionInterface
+class Subscription
 {
     /**
      * @var string

@@ -2,7 +2,7 @@
 
 namespace TeamGantt\Subscreeb\Gateways;
 
-use TeamGantt\Subscreeb\Models\Subscription\Subscription;
+use TeamGantt\Subscreeb\Models\Subscription;
 
 interface SubscriptionGatewayInterface
 {
