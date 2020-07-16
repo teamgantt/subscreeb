@@ -161,7 +161,7 @@ describe('SubscriptionManager', function () {
                     ],
                     'discounts' => [
                         [
-                            'id' => 'test-discount',
+                            'id' => 'test-discount-a',
                             'amount' => '15.50',
                             'billingCycles' => 1
                         ]
@@ -171,10 +171,49 @@ describe('SubscriptionManager', function () {
                 $subscription = $this->manager->create($data);
                 $discounts = $subscription->getDiscounts();
 
-                expect($discounts[0]->getId())->toBe('test-discount');
+                expect($discounts[0]->getId())->toBe('test-discount-a');
                 expect($discounts[0]->getAmount())->toBe(15.50);
                 expect($discounts[0]->getBillingCycles())->toBe(1);
                 expect($discounts)->toHaveLength(1);
+            });
+
+            it('should create a subscription with multiple discounts', function () {
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => 'test-plan-b-yearly',
+                    ],
+                    'discounts' => [
+                        [
+                            'id' => 'test-discount-a',
+                            'amount' => '15.50',
+                            'billingCycles' => 1
+                        ],
+                        [
+                            'id' => 'test-discount-b',
+                            'amount' => '4.50',
+                            'billingCycles' => 1
+                        ]
+                    ]
+                ];
+
+                $subscription = $this->manager->create($data);
+                $discounts = $subscription->getDiscounts();
+
+                expect($discounts[0]->getId())->toBe('test-discount-a');
+                expect($discounts[0]->getAmount())->toBe(15.50);
+                expect($discounts[0]->getBillingCycles())->toBe(1);
+
+                expect($discounts[1]->getId())->toBe('test-discount-b');
+                expect($discounts[1]->getAmount())->toBe(4.50);
+                expect($discounts[1]->getBillingCycles())->toBe(1);
+
+                expect($discounts)->toHaveLength(2);
             });
 
             it('should throw an exception when plan id is invalid', function () {
