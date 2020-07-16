@@ -117,6 +117,37 @@ describe('SubscriptionManager', function () {
                 expect($addOns)->toHaveLength(1);
             });
 
+            it('should create a subscription with multiple addOns', function () {
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => 'test-plan-b-monthly',
+                    ],
+                    'addOns' => [
+                        [
+                            'id' => 'test-plan-a-monthly-user',
+                            'quantity' => '5'
+                        ],
+                        [
+                            'id' => 'test-plan-b-monthly-user',
+                            'quantity' => '5'
+                        ]
+                    ]
+                ];
+
+                $subscription = $this->manager->create($data);
+                $addOns = $subscription->getAddons();
+
+                expect($addOns[0]->getId())->toBe('test-plan-a-monthly-user');
+                expect($addOns[1]->getId())->toBe('test-plan-b-monthly-user');
+                expect($addOns)->toHaveLength(2);
+            });
+
             it('should create a subscription with a discount', function () {
                 $data = [
                     'customer' => [
