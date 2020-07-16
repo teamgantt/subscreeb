@@ -71,7 +71,7 @@ describe('SubscriptionManager', function () {
             });
 
             it('should create a subscription with a start date', function () {
-                $startDate = Carbon::tomorrow()->toDateString();
+                $startDate = Carbon::tomorrow('UTC')->toDateString();
 
                 $data = [
                     'customer' => [
