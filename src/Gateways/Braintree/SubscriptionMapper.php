@@ -115,7 +115,7 @@ class SubscriptionMapper implements SubscriptionMapperInterface
     protected function toBraintreeStartDate(Plan $plan): DateTime
     {
         return $plan->getStartDate()
-            ? (new Carbon($plan->getStartDate()))->setTimezone('UTC')
-            : Carbon::now('UTC');
+            ? new Carbon($plan->getStartDate(), 'utc')
+            : new Carbon('now', 'utc');
     }
 }
