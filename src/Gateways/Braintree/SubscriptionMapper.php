@@ -29,7 +29,9 @@ class SubscriptionMapper implements SubscriptionMapperInterface
         $addOns = $this->fromBraintreeAddOns($subscription);
         $discounts = $this->fromBraintreeDiscounts($subscription);
 
-        return new Subscription($subscriptionId, $customer, $payment, $plan, $addOns, $discounts);
+        $status = strtolower($subscription->status);
+
+        return new Subscription($subscriptionId, $customer, $payment, $plan, $addOns, $discounts, $status);
     }
 
     /**
@@ -74,7 +76,7 @@ class SubscriptionMapper implements SubscriptionMapperInterface
     protected function fromBraintreeDiscounts(BraintreeSubscription $subscription): array
     {
         return array_map(function (BraintreeDiscount $discountItem) {
-            return new Discount($discountItem->id, (float) $discountItem->amount, (int) $discountItem->numberOfBillingCycles);
+            return new Discount($discountItem->id, (float)$discountItem->amount, (int)$discountItem->numberOfBillingCycles);
         }, $subscription->discounts);
     }
 
@@ -112,10 +114,12 @@ class SubscriptionMapper implements SubscriptionMapperInterface
      * @return DateTime
      * @throws \Exception
      */
-    protected function toBraintreeStartDate(Plan $plan): DateTime
+    protected function toBraintreeStartDate(Plan $plan): ?DateTime
     {
-        return $plan->getStartDate()
-            ? new Carbon($plan->getStartDate(), 'utc')
-            : new Carbon('now', 'utc');
+        $isToday = $plan->getStartDate() === Carbon::today('utc')->toDateString();
+
+        return (!$plan->getStartDate() || $isToday)
+            ? null
+            : new Carbon($plan->getStartDate(), 'utc');
     }
 }

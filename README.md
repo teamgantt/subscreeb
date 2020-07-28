@@ -19,6 +19,8 @@ composer require teamgantt/subscreeb
 
 ``` php
 // Example create data
+`startDate` - a UTC timestamp
+
 $data = [
     'customer' => [
         'id' => '267360606',

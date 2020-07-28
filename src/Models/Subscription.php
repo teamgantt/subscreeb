@@ -35,6 +35,11 @@ class Subscription
     protected Plan $plan;
 
     /**
+     * @var string
+     */
+    protected string $status;
+
+    /**
      * Subscription constructor.
      * @param string $id
      * @param Customer $customer
@@ -42,8 +47,9 @@ class Subscription
      * @param Plan $plan
      * @param array $addOns
      * @param array $discounts
+     * @param string $status
      */
-    public function __construct(string $id, Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts)
+    public function __construct(string $id, Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts, string $status = '')
     {
         $this->id = $id;
         $this->customer = $customer;
@@ -51,6 +57,7 @@ class Subscription
         $this->plan = $plan;
         $this->addOns = $addOns;
         $this->discounts = $discounts;
+        $this->status = $status;
     }
 
     /**
@@ -99,6 +106,14 @@ class Subscription
     public function getDiscounts(): array
     {
         return $this->discounts;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 
     /**

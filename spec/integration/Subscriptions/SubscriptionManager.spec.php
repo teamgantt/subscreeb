@@ -10,6 +10,7 @@ use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\BraintreeSubscriptionGateway;
 use TeamGantt\Subscreeb\Gateways\Braintree\Configuration;
+use TeamGantt\Subscreeb\Models\SubscriptionStatus;
 use TeamGantt\Subscreeb\Subscriptions\SubscriptionManager;
 
 $dotenv = Dotenv::createImmutable(dirname(__DIR__, 3));
@@ -70,8 +71,8 @@ describe('SubscriptionManager', function () {
                 expect($subscription->getId())->not->toBeFalsy();
             });
 
-            it('should create a subscription with a start date', function () {
-                $startDate = Carbon::tomorrow('UTC')->toDateString();
+            it('should create a subscription with a future start date', function () {
+                $startDate = Carbon::today('utc')->addWeek()->toDateString();
 
                 $data = [
                     'customer' => [
@@ -89,6 +90,46 @@ describe('SubscriptionManager', function () {
                 $subscription = $this->manager->create($data);
 
                 expect($subscription->getPlan()->getStartDate())->toBe($startDate);
+                expect($subscription->getStatus())->toBe(SubscriptionStatus::PENDING);
+            });
+
+            it('should bill immediately when start date is set to today', function () {
+                $startDate = Carbon::today('utc')->toDateString();
+
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => 'test-plan-b-yearly',
+                        'startDate' => $startDate
+                    ]
+                ];
+
+                $subscription = $this->manager->create($data);
+
+                expect($subscription->getStatus())->toBe(SubscriptionStatus::ACTIVE);
+            });
+
+            it('should bill immediately when start date is not set', function () {
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => 'test-plan-c-monthly',
+                    ]
+                ];
+
+                $subscription = $this->manager->create($data);
+
+                expect($subscription->getStatus())->toBe(SubscriptionStatus::ACTIVE);
             });
 
             it('should create a subscription with an addOn', function () {
