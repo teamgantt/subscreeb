@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamGantt\Subscreeb\Gateways;
+namespace TeamGantt\Subscreeb\Gateways\Stripe;
 
 use Stripe\Exception\InvalidRequestException;
 use Stripe\StripeClient;
@@ -8,7 +8,7 @@ use TeamGantt\Subscreeb\Exceptions\CreatePaymentMethodException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Models\Messages\CreateCustomerResponse;
 
-class StripeSubscriptionGateway
+class SubscriptionGateway
 {
     protected StripeClient $gateway;
 

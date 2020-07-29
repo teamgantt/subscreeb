@@ -2,48 +2,39 @@
 
 namespace TeamGantt\Subscreeb\Subscriptions;
 
-use Gateway;
-use TeamGantt\Subscreeb\Gateways\Contracts\SubscriptionGateway;
-use TeamGantt\Subscreeb\Models\Customer;
-use TeamGantt\Subscreeb\Models\Payment;
-use TeamGantt\Subscreeb\Models\Plan;
+use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
 use TeamGantt\Subscreeb\Models\Subscription;
 
 class SubscriptionManager
 {
     /**
-     * @var SubscriptionGateway
+     * @var SubscriptionGatewayInterface
      */
-    protected SubscriptionGateway $gateway;
+    protected SubscriptionGatewayInterface $gateway;
+
+    /**
+     * @var SubscriptionRequestMapper
+     */
+    protected SubscriptionRequestMapper $requestMapper;
 
     /**
      * SubscriptionManager constructor.
-     * @param SubscriptionGateway $gateway
+     * @param SubscriptionGatewayInterface $gateway
      */
-    public function __construct(SubscriptionGateway $gateway)
+    public function __construct(SubscriptionGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
+        $this->requestMapper = new SubscriptionRequestMapper();
     }
 
     /**
-     * @param array $data
+     * @param array $request
      * @return Subscription
      */
-    public function create(array $data): Subscription
+    public function create(array $request): Subscription
     {
-        // Validate structure of $data
-        $customer = new Customer(
-            $data['customer']['id'] ?? '',
-            $data['customer']['firstName'] ?? '',
-            $data['customer']['lastName'] ?? '',
-            $data['customer']['emailAddress'] ?? ''
-        );
-        $payment = new Payment($data['payment']['nonce']);
-        $plan = new Plan(
-            $data['plan']['id'],
-            $data['plan']['startDate'] ?? ''
-        );
+        $subscription = $this->requestMapper->map($request);
 
-        return $this->gateway->create($customer, $payment, $plan);
+        return $this->gateway->create($subscription);
     }
 }

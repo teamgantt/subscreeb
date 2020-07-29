@@ -10,26 +10,54 @@ class Subscription
     protected string $id;
 
     /**
-     * @var string
+     * @var Customer
      */
-    protected string $gatewayCustomerId;
+    protected Customer $customer;
 
     /**
-     * @var string  Example: 2020-01-01
+     * @var array
      */
-    protected string $startDate;
+    protected array $addOns;
+
+    /**
+     * @var array
+     */
+    protected array $discounts;
+
+    /**
+     * @var Payment
+     */
+    protected Payment $payment;
+
+    /**
+     * @var Plan
+     */
+    protected Plan $plan;
+
+    /**
+     * @var string
+     */
+    protected string $status;
 
     /**
      * Subscription constructor.
      * @param string $id
-     * @param string $gatewayCustomerId
-     * @param string $startDate
+     * @param Customer $customer
+     * @param Payment $payment
+     * @param Plan $plan
+     * @param array $addOns
+     * @param array $discounts
+     * @param string $status
      */
-    public function __construct(string $id, string $gatewayCustomerId, string $startDate)
+    public function __construct(string $id, Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts, string $status = '')
     {
         $this->id = $id;
-        $this->gatewayCustomerId = $gatewayCustomerId;
-        $this->startDate = $startDate;
+        $this->customer = $customer;
+        $this->payment = $payment;
+        $this->plan = $plan;
+        $this->addOns = $addOns;
+        $this->discounts = $discounts;
+        $this->status = $status;
     }
 
     /**
@@ -41,18 +69,58 @@ class Subscription
     }
 
     /**
-     * @return string
+     * @return Customer
      */
-    public function getGatewayCustomerId(): string
+    public function getCustomer(): Customer
     {
-        return $this->gatewayCustomerId;
+        return $this->customer;
+    }
+
+    /**
+     * @return Payment
+     */
+    public function getPayment(): Payment
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @return Plan
+     */
+    public function getPlan(): Plan
+    {
+        return $this->plan;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAddOns(): array
+    {
+        return $this->addOns;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDiscounts(): array
+    {
+        return $this->discounts;
     }
 
     /**
      * @return string
      */
-    public function getStartDate(): string
+    public function getStatus(): string
     {
-        return $this->startDate;
+        return $this->status;
+    }
+
+    /**
+     * @param Customer $customer
+     */
+    public function setCustomer(Customer $customer): void
+    {
+        $this->customer = $customer;
     }
 }
