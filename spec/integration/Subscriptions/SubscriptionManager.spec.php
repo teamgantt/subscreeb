@@ -71,6 +71,24 @@ describe('SubscriptionManager', function () {
                 expect($subscription->getId())->not->toBeFalsy();
             });
 
+            it('should return the correct customer', function () {
+                $data = [
+                    'customer' => [
+                        'id' => $this->customer->id,
+                    ],
+                    'payment' => [
+                        'nonce' => 'fake-valid-visa-nonce'
+                    ],
+                    'plan' => [
+                        'id' => 'test-plan-c-yearly',
+                    ]
+                ];
+
+                $subscription = $this->manager->create($data);
+
+                expect($subscription->getCustomer()->getId())->toBe($this->customer->id);
+            });
+
             it('should create a subscription with a future start date', function () {
                 $startDate = Carbon::today('utc')->addWeek()->toDateString();
 
@@ -321,12 +339,12 @@ describe('SubscriptionManager', function () {
                         'id' => 'test-plan-a-monthly'
                     ],
                     'discounts' => [
-                    [
-                        'id' => 'very-bad-promo-code-that-does-not-exist',
-                        'amount' => '15.50',
-                        'billingCycles' => 1
+                        [
+                            'id' => 'very-bad-promo-code-that-does-not-exist',
+                            'amount' => '15.50',
+                            'billingCycles' => 1
+                        ]
                     ]
-                ]
                 ];
 
                 $sut = function () use ($data) {

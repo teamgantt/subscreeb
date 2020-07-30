@@ -2,8 +2,10 @@
 
 namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
+use Braintree\Exception\NotFound;
 use Braintree\Gateway as Braintree;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
+use TeamGantt\Subscreeb\Exceptions\SubscriptionNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\Customer\CustomerStrategy;
 use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
 use TeamGantt\Subscreeb\Models\Subscription;
@@ -26,6 +28,11 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
     protected SubscriptionMapperInterface $subscriptionMapper;
 
     /**
+     * @var CustomerMapper
+     */
+    protected CustomerMapper $customerMapper;
+
+    /**
      * BraintreeSubscriptionGateway constructor.
      * @param ConfigurationInterface $config
      */
@@ -40,6 +47,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
 
         $this->customerStrategy = new CustomerStrategy($this->gateway);
         $this->subscriptionMapper = new SubscriptionMapper();
+        $this->customerMapper = new CustomerMapper();
     }
 
     /**
@@ -56,6 +64,27 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
         return $this->createSubscription($subscription);
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @throws SubscriptionNotFoundException
+     */
+    public function cancel(string $subscriptionId): Subscription
+    {
+        try {
+            $result = $this->gateway
+                ->subscription()
+                ->cancel($subscriptionId);
+        } catch (NotFound $e) {
+            throw new SubscriptionNotFoundException("Subscription {$subscriptionId} not found");
+        }
+
+        $customer = $this->customerMapper->fromBraintree($result->subscription);
+
+        return $this->subscriptionMapper
+            ->fromBraintreeSubscription($result->subscription, $customer);
+    }
+
     protected function createSubscription(Subscription $subscription): Subscription
     {
         $request = $this->subscriptionMapper->toBraintreeRequest($subscription);
@@ -68,6 +97,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
             throw new CreateSubscriptionException($result->message);
         }
 
-        return $this->subscriptionMapper->fromBraintreeSubscription($result->subscription, $subscription->getCustomer());
+        return $this->subscriptionMapper
+            ->fromBraintreeSubscription($result->subscription, $subscription->getCustomer());
     }
 }
