@@ -5,6 +5,7 @@ namespace TeamGantt\Subscreeb\Gateways\Braintree;
 use Braintree\Exception\NotFound;
 use Braintree\Gateway as Braintree;
 use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
+use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Exceptions\SubscriptionNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\Customer\CustomerStrategy;
 use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
@@ -74,6 +75,31 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
         }
 
         return $this->subscriptionMapper->fromBraintreeSubscription($result->subscription);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getByCustomer(string $customerId): array
+    {
+        $customer = null;
+
+        try {
+            $customer = $this->gateway->customer()->find($customerId);
+        } catch (NotFound $e) {
+            throw new CustomerNotFoundException("Customer with id {$customerId} does not exist");
+        }
+
+        $subscriptions = [];
+        // @phpstan-ignore-next-line
+        foreach ($customer->paymentMethods as $paymentMethod) {
+            // @phpstan-ignore-next-line
+            $subscriptions = array_merge($subscriptions, $paymentMethod->subscriptions);
+        }
+
+        return array_map(function ($subscription) {
+            return $this->subscriptionMapper->fromBraintreeSubscription($subscription);
+        }, $subscriptions);
     }
 
     protected function createSubscription(Subscription $subscription): Subscription

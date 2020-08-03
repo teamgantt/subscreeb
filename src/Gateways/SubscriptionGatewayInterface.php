@@ -21,4 +21,12 @@ interface SubscriptionGatewayInterface
      * @return Subscription
      */
     public function cancel(string $subscriptionId): Subscription;
+
+    /**
+     * Get subscriptions for a given customer id.
+     *
+     * @param string $customerId
+     * @return array<Subscription>
+     */
+    public function getByCustomer(string $customerId): array;
 }
