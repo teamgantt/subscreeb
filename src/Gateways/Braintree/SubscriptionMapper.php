@@ -3,13 +3,17 @@
 namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
 use Braintree\AddOn as BraintreeAddOn;
+use Braintree\Customer as BraintreeCustomer;
 use Braintree\Discount as BraintreeDiscount;
+use Braintree\Exception\NotFound;
+use Braintree\Gateway as Braintree;
 use Braintree\Subscription as BraintreeSubscription;
 use Carbon\Carbon;
 use DateTime;
 use TeamGantt\Subscreeb\Models\AddOn;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Discount;
+use TeamGantt\Subscreeb\Models\NullCustomer;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription;
@@ -17,11 +21,23 @@ use TeamGantt\Subscreeb\Models\Subscription;
 class SubscriptionMapper implements SubscriptionMapperInterface
 {
     /**
+     * @var Braintree
+     */
+    protected Braintree $gateway;
+
+    public function __construct(Braintree $gateway)
+    {
+        $this->gateway = $gateway;
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function fromBraintreeSubscription(BraintreeSubscription $subscription, Customer $customer): Subscription
+    public function fromBraintreeSubscription(BraintreeSubscription $subscription): Subscription
     {
         $subscriptionId = $subscription->id;
+
+        $customer = $this->fromBraintreeCustomer($subscription);
 
         $payment = new Payment('', $subscription->paymentMethodToken);
         $plan = new Plan($subscription->planId, Carbon::instance($subscription->firstBillingDate)->toDateString());
@@ -67,6 +83,31 @@ class SubscriptionMapper implements SubscriptionMapperInterface
         return array_map(function (BraintreeAddOn $addOnItem) {
             return new AddOn($addOnItem->id, $addOnItem->quantity ?? 0);
         }, $subscription->addOns);
+    }
+
+    /**
+     * @param BraintreeSubscription $subscription
+     * @return Customer
+     */
+    protected function fromBraintreeCustomer(BraintreeSubscription $subscription): Customer
+    {
+        $paymentMethodToken = $subscription->paymentMethodToken;
+        try {
+            $paymentMethod = $this->gateway->paymentMethod()->find($paymentMethodToken);
+        } catch (NotFound $e) {
+            return new NullCustomer();
+        }
+
+        $customerId = $paymentMethod->customerId;
+        $customer = null;
+        try {
+            $customer = $this->gateway->customer()->find($customerId);
+        } catch (NotFound $e) {
+            return new NullCustomer();
+        }
+
+        // @phpstan-ignore-next-line
+        return new Customer($customer->id, $customer->firstName, $customer->lastName, $customer->email);
     }
 
     /**

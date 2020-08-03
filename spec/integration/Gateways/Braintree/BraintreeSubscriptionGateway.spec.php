@@ -62,13 +62,13 @@ describe('BraintreeSubscriptionGateway', function () {
 
             $subscription = $this->gateway->create($subscription);
             $subscriptionId = $subscription->getId();
-            $deletedSubscription = $this->gateway->cancel($subscriptionId);
+            $canceledSubscription = $this->gateway->cancel($subscriptionId);
 
-            expect($deletedSubscription->getStatus())->toBe(SubscriptionStatus::CANCELED);
-            expect($deletedSubscription->getCustomer()->getId())->toBe($this->customer->id);
+            expect($canceledSubscription->getStatus())->toBe(SubscriptionStatus::CANCELED);
+            expect($canceledSubscription->getCustomer()->getId())->toBe($this->customer->id);
         });
 
-        it('should throw an exception if the subscription isn not found', function() {
+        it('should throw an exception if the subscription is not found', function() {
             $sut = function () {
                 $this->gateway->cancel('1234abcd');
             };

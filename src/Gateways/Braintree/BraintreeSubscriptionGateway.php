@@ -28,11 +28,6 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
     protected SubscriptionMapperInterface $subscriptionMapper;
 
     /**
-     * @var CustomerMapper
-     */
-    protected CustomerMapper $customerMapper;
-
-    /**
      * BraintreeSubscriptionGateway constructor.
      * @param ConfigurationInterface $config
      */
@@ -46,8 +41,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
         ]);
 
         $this->customerStrategy = new CustomerStrategy($this->gateway);
-        $this->subscriptionMapper = new SubscriptionMapper();
-        $this->customerMapper = new CustomerMapper();
+        $this->subscriptionMapper = new SubscriptionMapper($this->gateway);
     }
 
     /**
@@ -79,10 +73,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
             throw new SubscriptionNotFoundException("Subscription {$subscriptionId} not found");
         }
 
-        $customer = $this->customerMapper->fromBraintree($result->subscription);
-
-        return $this->subscriptionMapper
-            ->fromBraintreeSubscription($result->subscription, $customer);
+        return $this->subscriptionMapper->fromBraintreeSubscription($result->subscription);
     }
 
     protected function createSubscription(Subscription $subscription): Subscription
@@ -97,7 +88,6 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
             throw new CreateSubscriptionException($result->message);
         }
 
-        return $this->subscriptionMapper
-            ->fromBraintreeSubscription($result->subscription, $subscription->getCustomer());
+        return $this->subscriptionMapper->fromBraintreeSubscription($result->subscription);
     }
 }
