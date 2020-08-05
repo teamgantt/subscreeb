@@ -12,10 +12,9 @@ interface SubscriptionMapperInterface
      * Creates a Subscription domain model from a Braintree Subscription result
      *
      * @param BraintreeSubscription $subscription
-     * @param Customer $customer
      * @return Subscription
      */
-    public function fromBraintreeSubscription(BraintreeSubscription $subscription, Customer $customer): Subscription;
+    public function fromBraintreeSubscription(BraintreeSubscription $subscription): Subscription;
 
     /**
      * Creates a Braintree request from a Subscription domain model

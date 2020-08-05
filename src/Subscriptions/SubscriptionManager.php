@@ -37,4 +37,9 @@ class SubscriptionManager
 
         return $this->gateway->create($subscription);
     }
+
+    public function cancel(string $subscriptionId): Subscription
+    {
+        return $this->gateway->cancel($subscriptionId);
+    }
 }

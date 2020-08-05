@@ -6,4 +6,5 @@ class SubscriptionStatus
 {
     const ACTIVE = 'active';
     const PENDING = 'pending';
+    const CANCELED = 'canceled';
 }
