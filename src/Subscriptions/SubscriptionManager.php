@@ -38,8 +38,32 @@ class SubscriptionManager
         return $this->gateway->create($subscription);
     }
 
+    /**
+     * @param string $subscriptionId
+     * @return Subscription
+     */
     public function cancel(string $subscriptionId): Subscription
     {
         return $this->gateway->cancel($subscriptionId);
+    }
+
+    /**
+     * @param string $customerId
+     * @return array<Subscription>
+     */
+    public function getByCustomer(string $customerId): array
+    {
+        return $this->gateway->getByCustomer($customerId);
+    }
+
+    /**
+     * @param array $request
+     * @return Subscription
+     */
+    public function update(array $request): Subscription
+    {
+        $subscription = $this->requestMapper->map($request);
+
+        return $this->gateway->update($subscription);
     }
 }

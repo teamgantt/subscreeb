@@ -34,6 +34,7 @@ $data = [
     'plan' => [
         'id' => '401m',
         'startDate' => '2020-12-01',
+        'price' => 10.00
     ],
     'addOns' => [
         'id' => 'addOn-id',

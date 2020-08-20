@@ -3,7 +3,6 @@
 namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
 use Braintree\AddOn as BraintreeAddOn;
-use Braintree\Customer as BraintreeCustomer;
 use Braintree\Discount as BraintreeDiscount;
 use Braintree\Exception\NotFound;
 use Braintree\Gateway as Braintree;
@@ -40,7 +39,8 @@ class SubscriptionMapper implements SubscriptionMapperInterface
         $customer = $this->fromBraintreeCustomer($subscription);
 
         $payment = new Payment('', $subscription->paymentMethodToken);
-        $plan = new Plan($subscription->planId, Carbon::instance($subscription->firstBillingDate)->toDateString());
+        $price = (float)$subscription->price;
+        $plan = new Plan($subscription->planId, Carbon::instance($subscription->firstBillingDate)->toDateString(), $price);
 
         $addOns = $this->fromBraintreeAddOns($subscription);
         $discounts = $this->fromBraintreeDiscounts($subscription);
@@ -54,7 +54,7 @@ class SubscriptionMapper implements SubscriptionMapperInterface
      * {@inheritDoc}
      * @throws \Exception
      */
-    public function toBraintreeRequest(Subscription $subscription): array
+    public function toBraintreeCreateRequest(Subscription $subscription): array
     {
         $customer = $subscription->getCustomer();
         $plan = $subscription->getPlan();
@@ -65,13 +65,48 @@ class SubscriptionMapper implements SubscriptionMapperInterface
             'paymentMethodToken' => $customer->getPaymentToken(),
             'planId' => $plan->getId(),
             'firstBillingDate' => $this->toBraintreeStartDate($plan),
-            'addOns' => [
-                'add' => $this->toBraintreeAddOns($addOns)
-            ],
+            'addOns' => $this->toBraintreeNewAddOns($addOns),
             'discounts' => [
                 'add' => $this->toBraintreeDiscounts($discounts)
             ]
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toBraintreeUpdateRequest(Subscription $subscription, bool $hasPlanChanged): array
+    {
+        $plan = $subscription->getPlan();
+        $planId = $plan->getId();
+        $price = $plan->getPrice();
+        $addOns = $subscription->getAddOns();
+
+        $request = [
+            'options' => [
+                'prorateCharges' => true
+            ]
+        ];
+
+        if (!empty($planId)) {
+            $request['planId'] = $planId;
+        }
+
+        if (!empty($price)) {
+            $request['price'] = $price;
+        }
+
+        if (!empty($addOns)) {
+            $request['addOns'] = $hasPlanChanged
+                ? $this->toBraintreeNewAddOns($addOns)
+                : $this->toBraintreeUpdatedAddOns($addOns);
+        }
+
+        if (!empty($addOns) && $hasPlanChanged) {
+            $request['options']['replaceAllAddOnsAndDiscounts'] = true;
+        }
+
+        return $request;
     }
 
     /**
@@ -122,17 +157,41 @@ class SubscriptionMapper implements SubscriptionMapperInterface
     }
 
     /**
+     * Returns a Braintree addons array for adding new addons
      * @param array<AddOn> $addOns
      * @return array
      */
-    public function toBraintreeAddOns(array $addOns): array
+    protected function toBraintreeNewAddOns(array $addOns): array
     {
-        return array_map(function (AddOn $addOn) {
+        $addAddons = array_map(function (AddOn $addOn) {
             return [
                 'inheritedFromId' => $addOn->getId(),
                 'quantity' => $addOn->getQuantity()
             ];
         }, $addOns);
+
+        return [
+            'add' => $addAddons
+        ];
+    }
+
+    /**
+     * Returns a Braintree addons array for updating existing addons
+     * @param array $addOns
+     * @return array
+     */
+    protected function toBraintreeUpdatedAddOns(array $addOns): array
+    {
+        $updateAddons = array_map(function (AddOn $addOn) {
+            return [
+                'existingId' => $addOn->getId(),
+                'quantity' => $addOn->getQuantity()
+            ];
+        }, $addOns);
+
+        return [
+            'update' => $updateAddons
+        ];
     }
 
     /**

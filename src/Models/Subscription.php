@@ -123,4 +123,12 @@ class Subscription
     {
         $this->customer = $customer;
     }
+
+    /**
+     * @param Plan $plan
+     */
+    public function setPlan(Plan $plan): void
+    {
+        $this->plan = $plan;
+    }
 }

@@ -3,7 +3,6 @@
 namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
 use Braintree\Subscription as BraintreeSubscription;
-use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Subscription;
 
 interface SubscriptionMapperInterface
@@ -17,10 +16,19 @@ interface SubscriptionMapperInterface
     public function fromBraintreeSubscription(BraintreeSubscription $subscription): Subscription;
 
     /**
-     * Creates a Braintree request from a Subscription domain model
+     * Creates a Braintree subscription create request
      *
      * @param Subscription $subscription
      * @return array
      */
-    public function toBraintreeRequest(Subscription $subscription): array;
+    public function toBraintreeCreateRequest(Subscription $subscription): array;
+
+    /**
+     * Creates a Braintree subscription update request
+     *
+     * @param Subscription $subscription
+     * @param bool $hasPlanChanged
+     * @return array
+     */
+    public function toBraintreeUpdateRequest(Subscription $subscription, bool $hasPlanChanged): array;
 }

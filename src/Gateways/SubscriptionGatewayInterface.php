@@ -29,4 +29,12 @@ interface SubscriptionGatewayInterface
      * @return array<Subscription>
      */
     public function getByCustomer(string $customerId): array;
+
+    /**
+     * Updates an existing subscription
+     *
+     * @param Subscription $subscription
+     * @return Subscription
+     */
+    public function update(Subscription $subscription): Subscription;
 }
