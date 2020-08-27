@@ -5,7 +5,6 @@ namespace TeamGantt\Subscreeb\Subscriptions;
 use TeamGantt\Subscreeb\Models\AddOn;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Discount;
-use TeamGantt\Subscreeb\Models\NullCustomer;
 use TeamGantt\Subscreeb\Models\Payment;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription;
@@ -19,13 +18,15 @@ class SubscriptionRequestMapper
     public function map(array $request): Subscription
     {
         $id = $request['subscriptionId'] ?? '';
+        $price = $request['price'] ?? 0.00;
+        $startDate = $request['startDate'] ?? '';
         $customer = $this->mapCustomer($request['customer'] ?? []);
         $payment = $this->mapPayment($request['payment'] ?? []);
         $plan = $this->mapPlan($request['plan'] ?? []);
         $addOns = $this->mapAddons($request['addOns'] ?? []);
         $discounts = $this->mapDiscounts($request['discounts'] ?? []);
 
-        return new Subscription($id, $customer, $payment, $plan, $addOns, $discounts);
+        return new Subscription($id, $customer, $payment, $plan, $addOns, $discounts, $price, $startDate);
     }
 
     /**
@@ -59,7 +60,6 @@ class SubscriptionRequestMapper
     {
         return new Plan(
             $attributes['id'] ?? '',
-            $attributes['startDate'] ?? '',
             $attributes['price'] ?? 0.00
         );
     }

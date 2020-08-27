@@ -35,19 +35,20 @@ class SubscriptionMapper implements SubscriptionMapperInterface
     public function fromBraintreeSubscription(BraintreeSubscription $subscription): Subscription
     {
         $subscriptionId = $subscription->id;
+        $price = (float)$subscription->price;
+        $startDate = Carbon::instance($subscription->firstBillingDate)->toDateString();
 
         $customer = $this->fromBraintreeCustomer($subscription);
 
         $payment = new Payment('', $subscription->paymentMethodToken);
-        $price = (float)$subscription->price;
-        $plan = new Plan($subscription->planId, Carbon::instance($subscription->firstBillingDate)->toDateString(), $price);
+        $plan = new Plan($subscription->planId, $price);
 
         $addOns = $this->fromBraintreeAddOns($subscription);
         $discounts = $this->fromBraintreeDiscounts($subscription);
 
         $status = strtolower($subscription->status);
 
-        return new Subscription($subscriptionId, $customer, $payment, $plan, $addOns, $discounts, $status);
+        return new Subscription($subscriptionId, $customer, $payment, $plan, $addOns, $discounts, $price, $startDate, $status);
     }
 
     /**
@@ -64,7 +65,7 @@ class SubscriptionMapper implements SubscriptionMapperInterface
         return [
             'paymentMethodToken' => $customer->getPaymentToken(),
             'planId' => $plan->getId(),
-            'firstBillingDate' => $this->toBraintreeStartDate($plan),
+            'firstBillingDate' => $this->toBraintreeStartDate($subscription->getStartDate()),
             'addOns' => $this->toBraintreeNewAddOns($addOns),
             'discounts' => [
                 'add' => $this->toBraintreeDiscounts($discounts)
@@ -79,7 +80,7 @@ class SubscriptionMapper implements SubscriptionMapperInterface
     {
         $plan = $subscription->getPlan();
         $planId = $plan->getId();
-        $price = $plan->getPrice();
+        $price = $subscription->getPrice();
         $addOns = $subscription->getAddOns();
 
         $request = [
@@ -210,16 +211,16 @@ class SubscriptionMapper implements SubscriptionMapperInterface
     }
 
     /**
-     * @param Plan $plan
+     * @param string $startDate
      * @return DateTime
      * @throws \Exception
      */
-    protected function toBraintreeStartDate(Plan $plan): ?DateTime
+    protected function toBraintreeStartDate(string $startDate): ?DateTime
     {
-        $isToday = $plan->getStartDate() === Carbon::today('utc')->toDateString();
+        $isToday = $startDate === Carbon::today('utc')->toDateString();
 
-        return (!$plan->getStartDate() || $isToday)
+        return (!$startDate || $isToday)
             ? null
-            : new Carbon($plan->getStartDate(), 'utc');
+            : new Carbon($startDate, 'utc');
     }
 }

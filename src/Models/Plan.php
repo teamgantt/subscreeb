@@ -10,11 +10,6 @@ class Plan
     protected string $id;
 
     /**
-     * @var string
-     */
-    protected string $startDate;
-
-    /**
      * @var float
      */
     protected float $price;
@@ -22,13 +17,11 @@ class Plan
     /**
      * Plan constructor.
      * @param string $id
-     * @param string $startDate
      * @param float $price
      */
-    public function __construct(string $id, string $startDate, float $price)
+    public function __construct(string $id, float $price = 0.00)
     {
         $this->id = $id;
-        $this->startDate = $startDate;
         $this->price = $price;
     }
 
@@ -51,21 +44,5 @@ class Plan
     public function getPrice(): float
     {
         return $this->price;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStartDate(): string
-    {
-        return $this->startDate;
-    }
-
-    /**
-     * @param float $price
-     */
-    public function setPrice(float $price): void
-    {
-        $this->price = $price;
     }
 }

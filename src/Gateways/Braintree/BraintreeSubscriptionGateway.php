@@ -8,7 +8,6 @@ use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Exceptions\SubscriptionNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\Customer\CustomerStrategy;
-use TeamGantt\Subscreeb\Gateways\Braintree\Plan\PlanUpdateSetter;
 use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
 use TeamGantt\Subscreeb\Models\Subscription;
 
@@ -30,9 +29,9 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
     protected SubscriptionMapperInterface $subscriptionMapper;
 
     /**
-     * @var PlanUpdateSetter
+     * @var UpdatedSubscriptionBuilder
      */
-    protected PlanUpdateSetter $planUpdateSetter;
+    protected UpdatedSubscriptionBuilder $updatedSubscriptionBuilder;
 
     /**
      * BraintreeSubscriptionGateway constructor.
@@ -48,7 +47,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
         ]);
 
         $this->customerStrategy = new CustomerStrategy($this->gateway);
-        $this->planUpdateSetter = new PlanUpdateSetter($this->gateway);
+        $this->updatedSubscriptionBuilder = new UpdatedSubscriptionBuilder($this->gateway);
         $this->subscriptionMapper = new SubscriptionMapper($this->gateway);
     }
 
@@ -114,11 +113,14 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
      */
     public function update(Subscription $subscription): Subscription
     {
-        $plan = $this->planUpdateSetter->set($subscription->getPlan());
-        $subscription->setPlan($plan);
+        $subscription = $this->updatedSubscriptionBuilder
+            ->setSubscription($subscription)
+            ->hydratePlan($subscription->getPlan()->getId())
+            ->setPriceOverride($subscription->getPrice())
+            ->getSubscription();
 
         $existingSubscription = $this->getSubscription($subscription->getId());
-        $hasPlanChanged = !$existingSubscription->getPlan()->equals($plan);
+        $hasPlanChanged = !$existingSubscription->getPlan()->equals($subscription->getPlan());
 
         return $this->updateSubscription($subscription, $hasPlanChanged);
     }

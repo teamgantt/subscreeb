@@ -154,34 +154,32 @@ describe('BraintreeSubscriptionGateway', function () {
             $updatedSubscription = $this->gateway->update($updatedSubscription);
 
             expect($updatedSubscription->getPlan()->getId())->toBe('test-plan-b-monthly');
-            expect($updatedSubscription->getPlan()->getPrice())->toBe(10.00);
+            expect($updatedSubscription->getPrice())->toBe(10.00);
         });
 
         it('should update the base price when set', function () {
             $updatedSubscription = $this->mapper->map([
                 'subscriptionId' => $this->subscription->getId(),
-                'plan' => [
-                    'price' => 20.00,
-                ]
+                'price' => 20.00,
             ]);
 
             $updatedSubscription = $this->gateway->update($updatedSubscription);
 
-            expect($updatedSubscription->getPlan()->getPrice())->toBe(20.00);
+            expect($updatedSubscription->getPrice())->toBe(20.00);
         });
 
         it('should override price when plan id set', function() {
             $updatedSubscription = $this->mapper->map([
                 'subscriptionId' => $this->subscription->getId(),
+                'price' => 50.00,
                 'plan' => [
                     'id' => 'test-plan-b-monthly',
-                    'price' => 50.00,
                 ]
             ]);
 
             $updatedSubscription = $this->gateway->update($updatedSubscription);
 
-            expect($updatedSubscription->getPlan()->getPrice())->toBe(50.00);
+            expect($updatedSubscription->getPrice())->toBe(50.00);
         });
 
         it('should update addons quantity when the plan is the same', function () {

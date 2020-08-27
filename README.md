@@ -22,6 +22,8 @@ composer require teamgantt/subscreeb
 `startDate` - a UTC timestamp
 
 $data = [
+    'startDate' => '2020-12-01',
+    'price' => 10.00,
     'customer' => [
         'id' => '267360606',
         'firstName' => 'Tyson',
@@ -32,9 +34,7 @@ $data = [
         'nonce' => 'fake-valid-visa-nonce'
     ],
     'plan' => [
-        'id' => '401m',
-        'startDate' => '2020-12-01',
-        'price' => 10.00
+        'id' => '401m'
     ],
     'addOns' => [
         'id' => 'addOn-id',
