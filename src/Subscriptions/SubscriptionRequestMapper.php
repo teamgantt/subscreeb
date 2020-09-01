@@ -18,7 +18,7 @@ class SubscriptionRequestMapper
     public function map(array $request): Subscription
     {
         $id = $request['subscriptionId'] ?? '';
-        $price = $request['price'] ?? 0.00;
+        $price = $request['price'] ?? null;
         $startDate = $request['startDate'] ?? '';
         $customer = $this->mapCustomer($request['customer'] ?? []);
         $payment = $this->mapPayment($request['payment'] ?? []);

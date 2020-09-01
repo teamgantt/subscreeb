@@ -25,10 +25,10 @@ interface UpdatedSubscriptionBuilderInterface
     /**
      * Sets subscription price override
      *
-     * @param float $priceOverride
+     * @param float|null $priceOverride
      * @return UpdatedSubscriptionBuilderInterface
      */
-    public function setPriceOverride(float $priceOverride): UpdatedSubscriptionBuilderInterface;
+    public function setPriceOverride(?float $priceOverride): UpdatedSubscriptionBuilderInterface;
 
     /**
      * Sets a subscription instance

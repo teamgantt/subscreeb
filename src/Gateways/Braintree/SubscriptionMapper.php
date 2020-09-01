@@ -93,7 +93,7 @@ class SubscriptionMapper implements SubscriptionMapperInterface
             $request['planId'] = $planId;
         }
 
-        if (!empty($price)) {
+        if (!is_null($price)) {
             $request['price'] = $price;
         }
 

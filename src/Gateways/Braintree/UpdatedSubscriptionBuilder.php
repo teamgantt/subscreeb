@@ -54,9 +54,9 @@ class UpdatedSubscriptionBuilder implements UpdatedSubscriptionBuilderInterface
     /**
      * @inheritDoc
      */
-    public function setPriceOverride(float $priceOverride): UpdatedSubscriptionBuilderInterface
+    public function setPriceOverride(?float $priceOverride): UpdatedSubscriptionBuilderInterface
     {
-        if (!empty($priceOverride)) {
+        if (!is_null($priceOverride)) {
             $this->subscription->setPrice($priceOverride);
         }
 

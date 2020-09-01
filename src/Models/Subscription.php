@@ -2,6 +2,8 @@
 
 namespace TeamGantt\Subscreeb\Models;
 
+use TeamGantt\Subscreeb\Exceptions\NegativePriceException;
+
 class Subscription
 {
     /**
@@ -35,9 +37,9 @@ class Subscription
     protected Plan $plan;
 
     /**
-     * @var float
+     * @var float|null
      */
-    protected float $price;
+    protected ?float $price;
 
     /**
      * @var string
@@ -57,11 +59,12 @@ class Subscription
      * @param Plan $plan
      * @param array $addOns
      * @param array $discounts
-     * @param float $price
+     * @param float|null $price
      * @param string $startDate
      * @param string $status
+     * @throws NegativePriceException
      */
-    public function __construct(string $id, Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts, float $price, string $startDate, string $status = '')
+    public function __construct(string $id, Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts, ?float $price, string $startDate, string $status = '')
     {
         $this->id = $id;
         $this->customer = $customer;
@@ -72,6 +75,10 @@ class Subscription
         $this->price = $price;
         $this->startDate = $startDate;
         $this->status = $status;
+
+        if ($price < 0) {
+            throw new NegativePriceException('Price cannot be a negative value');
+        }
     }
 
     /**
@@ -123,9 +130,9 @@ class Subscription
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getPrice(): float
+    public function getPrice(): ?float
     {
         return $this->price;
     }

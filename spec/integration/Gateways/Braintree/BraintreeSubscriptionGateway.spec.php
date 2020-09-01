@@ -4,6 +4,7 @@ namespace TeamGantt\Subscreeb\Tests;
 
 use Dotenv\Dotenv;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
+use TeamGantt\Subscreeb\Exceptions\NegativePriceException;
 use TeamGantt\Subscreeb\Exceptions\PlanNotFoundException;
 use TeamGantt\Subscreeb\Exceptions\SubscriptionNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\BraintreeSubscriptionGateway;
@@ -182,6 +183,61 @@ describe('BraintreeSubscriptionGateway', function () {
             expect($updatedSubscription->getPrice())->toBe(50.00);
         });
 
+        it('should support 0 based price overrides', function () {
+            $subscription = $this->mapper->map([
+                'customer' => [
+                    'id' => $this->customer->id,
+                ],
+                'payment' => [
+                    'nonce' => 'fake-valid-amex-nonce'
+                ],
+                'plan' => [
+                    'id' => 'test-plan-c-monthly',
+                ],
+            ]);
+
+            $subscription = $this->gateway->create($subscription);
+
+            $updatedSubscription = $this->mapper->map([
+                'subscriptionId' => $subscription->getId(),
+                'price' => 0,
+            ]);
+
+            $updatedSubscription = $this->gateway->update($updatedSubscription);
+
+            expect($updatedSubscription->getPrice())->toBe(0.00);
+        });
+
+        it('should not override price when not set', function () {
+            $subscription = $this->mapper->map([
+                'customer' => [
+                    'id' => $this->customer->id,
+                ],
+                'payment' => [
+                    'nonce' => 'fake-valid-dinersclub-nonce'
+                ],
+                'plan' => [
+                    'id' => 'test-plan-a-monthly',
+                ],
+            ]);
+
+            $subscription = $this->gateway->create($subscription);
+
+            $updatedSubscription = $this->mapper->map([
+                'subscriptionId' => $subscription->getId(),
+                'addOns' => [
+                    [
+                        'id' => 'test-plan-a-monthly-user',
+                        'quantity' => 5
+                    ]
+                ],
+            ]);
+
+            $updatedSubscription = $this->gateway->update($updatedSubscription);
+
+            expect($updatedSubscription->getPrice())->toBe(5.00);
+        });
+
         it('should update addons quantity when the plan is the same', function () {
             $subscription = $this->mapper->map([
                 'customer' => [
@@ -287,6 +343,17 @@ describe('BraintreeSubscriptionGateway', function () {
             $updatedSubscription = $this->gateway->update($updatedSubscription);
 
             expect($updatedSubscription->getPlan()->getId())->toBe('test-plan-a-monthly');
+        });
+
+        it('should throw an exception when price is negative', function () {
+            $sut = function () {
+                $this->mapper->map([
+                    'subscriptionId' => $this->subscription->getId(),
+                    'price' => -20.00,
+                ]);
+            };
+
+            expect($sut)->toThrow(new NegativePriceException('Price cannot be a negative value'));
         });
 
         it('should throw an exception when changing a plan with a different billing cycle', function () {
