@@ -111,18 +111,18 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
     /**
      * @inheritDoc
      */
-    public function update(Subscription $subscription): Subscription
+    public function update(Subscription $subscriptionUpdates): Subscription
     {
-        $subscription = $this->updatedSubscriptionBuilder
-            ->setSubscription($subscription)
-            ->hydratePlan($subscription->getPlan()->getId())
-            ->setPriceOverride($subscription->getPrice())
+        $subscriptionUpdates = $this->updatedSubscriptionBuilder
+            ->setSubscription($subscriptionUpdates)
+            ->hydratePlan($subscriptionUpdates->getPlan()->getId())
+            ->setPriceOverride($subscriptionUpdates->getPrice())
             ->getSubscription();
 
-        $existingSubscription = $this->getSubscription($subscription->getId());
-        $hasPlanChanged = !$existingSubscription->getPlan()->equals($subscription->getPlan());
+        $existingSubscription = $this->getSubscription($subscriptionUpdates->getId());
+        $hasPlanChanged = !$existingSubscription->getPlan()->equals($subscriptionUpdates->getPlan());
 
-        return $this->updateSubscription($subscription, $hasPlanChanged);
+        return $this->updateSubscription($subscriptionUpdates, $hasPlanChanged);
     }
 
     protected function createSubscription(Subscription $subscription): Subscription
@@ -153,13 +153,13 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
         return $this->subscriptionMapper->fromBraintreeSubscription($subscription);
     }
 
-    protected function updateSubscription(Subscription $subscription, bool $hasPlanChanged): Subscription
+    protected function updateSubscription(Subscription $subscriptionUpdates, bool $hasPlanChanged): Subscription
     {
-        $request = $this->subscriptionMapper->toBraintreeUpdateRequest($subscription, $hasPlanChanged);
+        $request = $this->subscriptionMapper->toBraintreeUpdateRequest($subscriptionUpdates, $hasPlanChanged);
 
         $result = $this->gateway
             ->subscription()
-            ->update($subscription->getId(), $request);
+            ->update($subscriptionUpdates->getId(), $request);
 
         if (!$result->success) {
             throw new UpdateSubscriptionException($result->message);
