@@ -262,6 +262,33 @@ describe('BraintreeSubscriptionGateway', function () {
             expect($addOns[0]->getQuantity())->toBe(10);
         });
 
+        it('should not update the plan when plan hasn\'t changed', function () {
+            $subscription = $this->mapper->map([
+                'customer' => [
+                    'id' => $this->customer->id,
+                ],
+                'payment' => [
+                    'nonce' => 'fake-valid-amex-nonce'
+                ],
+                'plan' => [
+                    'id' => 'test-plan-a-monthly',
+                ]
+            ]);
+
+            $this->gateway->create($subscription);
+
+            $updatedSubscription = $this->mapper->map([
+                'subscriptionId' => $this->subscription->getId(),
+                'plan' => [
+                    'id' => 'test-plan-a-monthly',
+                ]
+            ]);
+
+            $updatedSubscription = $this->gateway->update($updatedSubscription);
+
+            expect($updatedSubscription->getPlan()->getId())->toBe('test-plan-a-monthly');
+        });
+
         it('should throw an exception when changing a plan with a different billing cycle', function () {
             $updatedSubscription = $this->mapper->map([
                 'subscriptionId' => $this->subscription->getId(),
