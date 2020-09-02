@@ -10,19 +10,24 @@ class Plan
     protected string $id;
 
     /**
-     * @var string
+     * @var float
      */
-    protected string $startDate;
+    protected float $price;
 
     /**
      * Plan constructor.
      * @param string $id
-     * @param string $startDate
+     * @param float $price
      */
-    public function __construct(string $id, string $startDate)
+    public function __construct(string $id, float $price = 0.00)
     {
         $this->id = $id;
-        $this->startDate = $startDate;
+        $this->price = $price;
+    }
+
+    public function equals(Plan $plan): bool
+    {
+        return $this->id === $plan->getId();
     }
 
     /**
@@ -34,10 +39,10 @@ class Plan
     }
 
     /**
-     * @return string
+     * @return float
      */
-    public function getStartDate(): string
+    public function getPrice(): float
     {
-        return $this->startDate;
+        return $this->price;
     }
 }

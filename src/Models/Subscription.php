@@ -2,6 +2,8 @@
 
 namespace TeamGantt\Subscreeb\Models;
 
+use TeamGantt\Subscreeb\Exceptions\NegativePriceException;
+
 class Subscription
 {
     /**
@@ -35,6 +37,16 @@ class Subscription
     protected Plan $plan;
 
     /**
+     * @var float|null
+     */
+    protected ?float $price;
+
+    /**
+     * @var string
+     */
+    protected string $startDate;
+
+    /**
      * @var string
      */
     protected string $status;
@@ -47,9 +59,12 @@ class Subscription
      * @param Plan $plan
      * @param array $addOns
      * @param array $discounts
+     * @param float|null $price
+     * @param string $startDate
      * @param string $status
+     * @throws NegativePriceException
      */
-    public function __construct(string $id, Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts, string $status = '')
+    public function __construct(string $id, Customer $customer, Payment $payment, Plan $plan, array $addOns, array $discounts, ?float $price, string $startDate, string $status = '')
     {
         $this->id = $id;
         $this->customer = $customer;
@@ -57,7 +72,13 @@ class Subscription
         $this->plan = $plan;
         $this->addOns = $addOns;
         $this->discounts = $discounts;
+        $this->price = $price;
+        $this->startDate = $startDate;
         $this->status = $status;
+
+        if ($price < 0) {
+            throw new NegativePriceException('Price cannot be a negative value');
+        }
     }
 
     /**
@@ -109,6 +130,22 @@ class Subscription
     }
 
     /**
+     * @return float|null
+     */
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStartDate(): string
+    {
+        return $this->startDate;
+    }
+
+    /**
      * @return string
      */
     public function getStatus(): string
@@ -122,5 +159,21 @@ class Subscription
     public function setCustomer(Customer $customer): void
     {
         $this->customer = $customer;
+    }
+
+    /**
+     * @param Plan $plan
+     */
+    public function setPlan(Plan $plan): void
+    {
+        $this->plan = $plan;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice(float $price): void
+    {
+        $this->price = $price;
     }
 }

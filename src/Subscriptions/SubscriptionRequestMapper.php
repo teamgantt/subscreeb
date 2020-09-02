@@ -17,13 +17,16 @@ class SubscriptionRequestMapper
      */
     public function map(array $request): Subscription
     {
-        $customer = $this->mapCustomer($request['customer']);
-        $payment = $this->mapPayment($request['payment']);
-        $plan = $this->mapPlan($request['plan']);
+        $id = $request['subscriptionId'] ?? '';
+        $price = $request['price'] ?? null;
+        $startDate = $request['startDate'] ?? '';
+        $customer = $this->mapCustomer($request['customer'] ?? []);
+        $payment = $this->mapPayment($request['payment'] ?? []);
+        $plan = $this->mapPlan($request['plan'] ?? []);
         $addOns = $this->mapAddons($request['addOns'] ?? []);
         $discounts = $this->mapDiscounts($request['discounts'] ?? []);
 
-        return new Subscription('', $customer, $payment, $plan, $addOns, $discounts);
+        return new Subscription($id, $customer, $payment, $plan, $addOns, $discounts, $price, $startDate);
     }
 
     /**
@@ -46,7 +49,7 @@ class SubscriptionRequestMapper
      */
     protected function mapPayment(array $attributes): Payment
     {
-        return new Payment($attributes['nonce']);
+        return new Payment($attributes['nonce'] ?? '');
     }
 
     /**
@@ -56,8 +59,8 @@ class SubscriptionRequestMapper
     protected function mapPlan(array $attributes): Plan
     {
         return new Plan(
-            $attributes['id'],
-            $attributes['startDate'] ?? ''
+            $attributes['id'] ?? '',
+            $attributes['price'] ?? 0.00
         );
     }
 

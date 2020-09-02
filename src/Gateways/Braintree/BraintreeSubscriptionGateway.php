@@ -24,9 +24,14 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
     protected CustomerStrategy $customerStrategy;
 
     /**
-     * @var SubscriptionMapper
+     * @var SubscriptionMapperInterface
      */
     protected SubscriptionMapperInterface $subscriptionMapper;
+
+    /**
+     * @var UpdatedSubscriptionBuilder
+     */
+    protected UpdatedSubscriptionBuilder $updatedSubscriptionBuilder;
 
     /**
      * BraintreeSubscriptionGateway constructor.
@@ -42,6 +47,7 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
         ]);
 
         $this->customerStrategy = new CustomerStrategy($this->gateway);
+        $this->updatedSubscriptionBuilder = new UpdatedSubscriptionBuilder($this->gateway);
         $this->subscriptionMapper = new SubscriptionMapper($this->gateway);
     }
 
@@ -102,9 +108,26 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
         }, $subscriptions);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function update(Subscription $subscriptionUpdates): Subscription
+    {
+        $subscriptionUpdates = $this->updatedSubscriptionBuilder
+            ->setSubscription($subscriptionUpdates)
+            ->hydratePlan($subscriptionUpdates->getPlan()->getId())
+            ->setPriceOverride($subscriptionUpdates->getPrice())
+            ->getSubscription();
+
+        $existingSubscription = $this->getSubscription($subscriptionUpdates->getId());
+        $hasPlanChanged = !$existingSubscription->getPlan()->equals($subscriptionUpdates->getPlan());
+
+        return $this->updateSubscription($subscriptionUpdates, $hasPlanChanged);
+    }
+
     protected function createSubscription(Subscription $subscription): Subscription
     {
-        $request = $this->subscriptionMapper->toBraintreeRequest($subscription);
+        $request = $this->subscriptionMapper->toBraintreeCreateRequest($subscription);
 
         $result = $this->gateway
             ->subscription()
@@ -112,6 +135,34 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
 
         if (!$result->success) {
             throw new CreateSubscriptionException($result->message);
+        }
+
+        return $this->subscriptionMapper->fromBraintreeSubscription($result->subscription);
+    }
+
+    protected function getSubscription(string $subscriptionId): Subscription
+    {
+        $subscription = null;
+
+        try {
+            $subscription = $this->gateway->subscription()->find($subscriptionId);
+        } catch (NotFound $e) {
+            throw new SubscriptionNotFoundException("Subscription {$subscriptionId} not found");
+        }
+
+        return $this->subscriptionMapper->fromBraintreeSubscription($subscription);
+    }
+
+    protected function updateSubscription(Subscription $subscriptionUpdates, bool $hasPlanChanged): Subscription
+    {
+        $request = $this->subscriptionMapper->toBraintreeUpdateRequest($subscriptionUpdates, $hasPlanChanged);
+
+        $result = $this->gateway
+            ->subscription()
+            ->update($subscriptionUpdates->getId(), $request);
+
+        if (!$result->success) {
+            throw new UpdateSubscriptionException($result->message);
         }
 
         return $this->subscriptionMapper->fromBraintreeSubscription($result->subscription);

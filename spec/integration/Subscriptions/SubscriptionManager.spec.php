@@ -93,6 +93,7 @@ describe('SubscriptionManager', function () {
                 $startDate = Carbon::today('utc')->addWeek()->toDateString();
 
                 $data = [
+                    'startDate' => $startDate,
                     'customer' => [
                         'id' => $this->customer->id,
                     ],
@@ -100,14 +101,13 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => 'test-plan-a-yearly',
-                        'startDate' => $startDate
+                        'id' => 'test-plan-a-yearly'
                     ]
                 ];
 
                 $subscription = $this->manager->create($data);
 
-                expect($subscription->getPlan()->getStartDate())->toBe($startDate);
+                expect($subscription->getStartDate())->toBe($startDate);
                 expect($subscription->getStatus())->toBe(SubscriptionStatus::PENDING);
             });
 
@@ -115,6 +115,7 @@ describe('SubscriptionManager', function () {
                 $startDate = Carbon::today('utc')->toDateString();
 
                 $data = [
+                    'startDate' => $startDate,
                     'customer' => [
                         'id' => $this->customer->id,
                     ],
@@ -122,8 +123,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => 'test-plan-b-yearly',
-                        'startDate' => $startDate
+                        'id' => 'test-plan-b-yearly'
                     ]
                 ];
 
@@ -276,8 +276,6 @@ describe('SubscriptionManager', function () {
             });
 
             it('should throw an exception when plan id is invalid', function () {
-                $startDate = Carbon::today()->subWeek()->toDateString();
-
                 $data = [
                     'customer' => [
                         'id' => $this->customer->id,
@@ -298,8 +296,6 @@ describe('SubscriptionManager', function () {
             });
 
             it('should throw an exception when addOn is invalid', function () {
-                $startDate = Carbon::today()->subWeek()->toDateString();
-
                 $data = [
                     'customer' => [
                         'id' => $this->customer->id,
@@ -326,8 +322,6 @@ describe('SubscriptionManager', function () {
             });
 
             it('should throw an exception when discount is invalid', function () {
-                $startDate = Carbon::today()->subWeek()->toDateString();
-
                 $data = [
                     'customer' => [
                         'id' => $this->customer->id,
@@ -358,6 +352,7 @@ describe('SubscriptionManager', function () {
                 $startDate = Carbon::today()->subWeek()->toDateString();
 
                 $data = [
+                    'startDate' => $startDate,
                     'customer' => [
                         'id' => $this->customer->id,
                     ],
@@ -365,8 +360,7 @@ describe('SubscriptionManager', function () {
                         'nonce' => 'fake-valid-visa-nonce'
                     ],
                     'plan' => [
-                        'id' => 'test-plan-a-monthly',
-                        'startDate' => $startDate
+                        'id' => 'test-plan-a-monthly'
                     ]
                 ];
 
