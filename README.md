@@ -1,9 +1,28 @@
-# A PHP subscription platform abstraction
+# Subscreeb
+
+A PHP subscription abstraction of awesomeness
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/teamgantt/subscreeb.svg?style=flat-square)](https://packagist.org/packages/teamgantt/subscreeb)
 [![Build Status](https://img.shields.io/travis/teamgantt/subscreeb/master.svg?style=flat-square)](https://travis-ci.org/teamgantt/subscreeb)
 [![Quality Score](https://img.shields.io/scrutinizer/g/teamgantt/subscreeb.svg?style=flat-square)](https://scrutinizer-ci.com/g/teamgantt/subscreeb)
 [![Total Downloads](https://img.shields.io/packagist/dt/teamgantt/subscreeb.svg?style=flat-square)](https://packagist.org/packages/teamgantt/subscreeb)
+
+## Table Of Contents
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Subscription Attributes](#subscription-attributes)
+  - [Initialize SubscriptionManager with Braintree](#initialize-subscriptionmanager-with-braintree)
+  - [Create a subscription](#create-a-subscription)
+  - [Update a subscription](#update-a-subscription)
+  - [Cancel a subscription](#cancel-a-subscription)
+  - [Get subscriptions by customer](#get-subscriptions-by-customer)
+- [Development](#development)
+  - [Requirements](#requirements)
+  - [Setup](#setup)
+  - [Testing](#testing)
+  - [Coding Standards](#coding-standards)
+  - [Static Analysis](#static-analysis)
 
 ## Getting Started
 
