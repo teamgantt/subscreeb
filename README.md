@@ -24,6 +24,7 @@ Attribute | Description | Example
 id | A unique value that identifies a specific subscription |
 startDate | The day the subscription will start billing in UTC time  | '2020-12-01' 
 price | The price for the subscription. This will override the plan's default price | 20.00
+status | The subscription's current status. | 'active', 'pending', 'cancelled' |
 customer | The customer's details related to the subscription | See Customer Attributes
 payment | The payment details associated with the subscription | See Payment Attributes
 plan | The plan details associated with the subscription | See Plan Attributes
@@ -37,6 +38,7 @@ discounts | An array of discount to associated with the subscription | See Disco
     'id' => 'new-rad-subscription',
     'startDate' => '2020-12-01',
     'price' => 10.00,
+    'status' => 'active',
     'customer' => [
         'id' => '267360606',
         'firstName' => 'Tyson',
