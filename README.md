@@ -248,7 +248,106 @@ $data = [
 
 $subscription = $manager->create($data);
 ```
+
+### Update a subscription
+
+Updates an existing subscription. 
+
+You can modify the plan, price, and addOns. Changing the plan to a different billing cycle is not supported.
   
+#### Supported Parameters
+
+- subscriptionId - required
+- plan
+  - id - updates subscription to a new plan
+- price - overrides subscription base price or plan price
+- addOns - adds or updates addOns
+  - id
+  - quantity
+  - price
+
+#### To a different plan
+
+- Passing a plan id that doesn't existing will throw an exception of `PlanNotFoundException`.
+- Passing a plan id with a different billing cycle will throw an exception of `UpdateSubscriptionException`.
+
+```php
+$data = [
+    'subscriptionId' => 'existing-subscription-id',
+    'plan' => [
+        'id' => 'a-new-plan-id',
+    ]
+];
+
+$subscription = $manager->update($data);
+```
+
+##### Braintree
+
+You can only update to a plan with the same billing cycle; at this time we do not allow you to update from a yearly plan to a monthly plan and vice versa. 
+
+### To a new base price
+
+- Passing a negative price value will throw an exception of `NegativePriceException`.
+
+```php
+$data = [
+    'subscriptionId' => 'existing-subscription-id',
+    'price' => 20.00
+];
+
+$subscription = $manager->update($data);
+```
+
+### To a new plan with a price override
+
+```php
+$data = [
+    'subscriptionId' => 'existing-subscription-id',
+    'plan' => [
+        'id' => 'a-new-plan-id',
+    ],
+    'price' => 50.00
+];
+
+$subscription = $manager->update($data);
+```
+
+### With a quantity change to addOns
+
+```php
+$data = [
+    'subscriptionId' => 'existing-subscription-id',
+    'addOns' => [
+        [
+            'id' => 'addOn-id',
+            'quantity' => 10
+        ]
+    ]
+];
+
+$subscription = $manager->update($data);
+```
+
+### To a new plan with new addOns
+
+```php
+$data = [
+    'subscriptionId' => 'existing-subscription-id',
+    'plan' => [
+        'id' => 'a-new-plan-id',
+    ],
+    'addOns' => [
+        [
+            'id' => 'addOn-id',
+            'quantity' => 3
+        ]
+    ]
+];
+
+$subscription = $manager->update($data);
+```
+
 ## Development
 
 ### Requirements
