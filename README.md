@@ -359,6 +359,16 @@ Cancels an existing subscription.
 $subscription = $manager->cancel($subscriptionId);
 ```
 
+### Get subscriptions by customer 
+
+Gets all subscriptions for a customer.
+
+- Passing a customer id that doesn't existing will throw a `CustomerNotFoundException`.
+
+```php
+$subscriptions = $manager->getByCustomer($customerId);
+```
+
 ## Development
 
 ### Requirements
