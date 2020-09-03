@@ -390,7 +390,7 @@ If you discover any security related issues, please email tyson@teamgantt.com in
 
 ## Credits
 
-- [Tyson Nero](https://github.com/teamgantt)
+- [Tyson Nero](https://github.com/tysonnero)
 - [All Contributors](../../contributors)
 
 ## License
