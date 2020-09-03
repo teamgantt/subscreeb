@@ -348,6 +348,17 @@ $data = [
 $subscription = $manager->update($data);
 ```
 
+### Cancel a subscription
+
+Cancels an existing subscription.
+
+- Passing a subscription id that doesn't existing will throw a `SubscriptionNotFoundException`.
+- Returns a Subscription model
+
+```php
+$subscription = $manager->cancel($subscriptionId);
+```
+
 ## Development
 
 ### Requirements
