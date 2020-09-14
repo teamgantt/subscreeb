@@ -41,9 +41,9 @@ composer require teamgantt/subscreeb
 Attribute | Description | Example
 --------- | ----------- | -------
 id | A unique value that identifies a specific subscription |
-startDate | The day the subscription will start billing in UTC time  | '2020-12-01' 
+startDate | The day the subscription will start billing in UTC time  | '2020-12-01'
 price | The price for the subscription. This will override the plan's default price | 20.00
-status | The subscription's current status. | 'active', 'pending', 'cancelled' |
+status | The subscription's current status. | 'active', 'canceled', 'expired', 'past due', 'pending' |
 customer | The customer's details related to the subscription | See Customer Attributes
 payment | The payment details associated with the subscription | See Payment Attributes
 plan | The plan details associated with the subscription | See Plan Attributes
@@ -72,14 +72,18 @@ discounts | An array of discount to associated with the subscription | See Disco
         'price' => 10.00
     ],
     'addOns' => [
-        'id' => 'addOn-id',
-        'quantity' => 5,
-        'price' => 10.00
+        [
+            'id' => 'addOn-id',
+            'quantity' => 5,
+            'price' => 10.00
+        ]
     ],
     'discounts' => [
-        'id' => 'discount-id',
-        'amount' => 100.00,
-        'billingCycles' => 1
+        [
+            'id' => 'discount-id',
+            'amount' => 100.00,
+            'billingCycles' => 1
+        ]
     ],
 
 ];
@@ -96,7 +100,7 @@ emailAddress | the email address of the customer |
 ### Payment Attributes
 Attribute | Description | Example
 --------- | ----------- | -------
-nonce | A single use reference to the payment method provided by the customer | 
+nonce | A single use reference to the payment method provided by the customer |
 
 ### Plan Attributes
 Attribute | Description | Example
@@ -160,11 +164,11 @@ Create a new subscription. If an existing customer is not passed, a new one can 
   - id - required
   - amount - required
   - billingCycles - required
-  
+
 #### Returns
 
 A Subscription model
-  
+
 #### With an existing user
 
 ```php
@@ -272,10 +276,10 @@ $subscription = $manager->create($data);
 
 ### Update a subscription
 
-Updates an existing subscription. 
+Updates an existing subscription.
 
 You can modify the plan, price, and addOns. Changing the plan to a different billing cycle is not supported.
-  
+
 #### Supported Parameters
 
 - subscriptionId - required
@@ -305,7 +309,7 @@ $subscription = $manager->update($data);
 
 ##### Braintree
 
-You can only update to a plan with the same billing cycle; at this time we do not allow you to update from a yearly plan to a monthly plan and vice versa. 
+You can only update to a plan with the [same billing cycle](https://developers.braintreepayments.com/guides/recurring-billing/manage/php#plans); at this time we do not allow you to update from a yearly plan to a monthly plan and vice versa.
 
 ### To a new base price
 
@@ -380,7 +384,7 @@ Cancels an existing subscription.
 $subscription = $manager->cancel($subscriptionId);
 ```
 
-### Get subscriptions by customer 
+### Get subscriptions by customer
 
 Gets all subscriptions for a customer.
 
