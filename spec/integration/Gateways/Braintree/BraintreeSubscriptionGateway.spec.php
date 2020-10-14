@@ -9,6 +9,7 @@ use TeamGantt\Subscreeb\Exceptions\PlanNotFoundException;
 use TeamGantt\Subscreeb\Exceptions\SubscriptionNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\BraintreeSubscriptionGateway;
 use TeamGantt\Subscreeb\Gateways\Braintree\Configuration;
+use TeamGantt\Subscreeb\Gateways\Braintree\Gateway\DefaultGateway;
 use TeamGantt\Subscreeb\Gateways\Braintree\UpdateSubscriptionException;
 use TeamGantt\Subscreeb\Models\Subscription;
 use TeamGantt\Subscreeb\Models\SubscriptionStatus;
@@ -29,7 +30,9 @@ describe('BraintreeSubscriptionGateway', function () {
             $_ENV['BRAINTREE_PRIVATE_KEY']
         );
 
-        $this->gateway = new BraintreeSubscriptionGateway($this->config);
+        $braintreeGateway = new DefaultGateway($this->config);
+
+        $this->gateway = new BraintreeSubscriptionGateway($braintreeGateway);
 
         $this->braintree = new \Braintree\Gateway([
             'environment' => $this->config->getEnvironment(),

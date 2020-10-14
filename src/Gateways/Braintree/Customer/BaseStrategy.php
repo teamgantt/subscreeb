@@ -2,21 +2,21 @@
 
 namespace TeamGantt\Subscreeb\Gateways\Braintree\Customer;
 
-use Braintree\Gateway;
+use TeamGantt\Subscreeb\Gateways\Braintree\Gateway\BraintreeGatewayInterface;
 
 abstract class BaseStrategy implements StrategyInterface
 {
     /**
-     * @var Gateway
+     * @var BraintreeGatewayInterface
      */
-    protected Gateway $gateway;
+    protected BraintreeGatewayInterface $gateway;
 
     /**
      * BaseStrategy constructor
      *
-     * @param Gateway $gateway
+     * @param BraintreeGatewayInterface $gateway
      */
-    public function __construct(Gateway $gateway)
+    public function __construct(BraintreeGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }

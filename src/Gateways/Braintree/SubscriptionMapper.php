@@ -5,10 +5,10 @@ namespace TeamGantt\Subscreeb\Gateways\Braintree;
 use Braintree\AddOn as BraintreeAddOn;
 use Braintree\Discount as BraintreeDiscount;
 use Braintree\Exception\NotFound;
-use Braintree\Gateway as Braintree;
 use Braintree\Subscription as BraintreeSubscription;
 use Carbon\Carbon;
 use DateTime;
+use TeamGantt\Subscreeb\Gateways\Braintree\Gateway\BraintreeGatewayInterface;
 use TeamGantt\Subscreeb\Models\AddOn;
 use TeamGantt\Subscreeb\Models\Customer;
 use TeamGantt\Subscreeb\Models\Discount;
@@ -20,11 +20,11 @@ use TeamGantt\Subscreeb\Models\Subscription;
 class SubscriptionMapper implements SubscriptionMapperInterface
 {
     /**
-     * @var Braintree
+     * @var BraintreeGatewayInterface
      */
-    protected Braintree $gateway;
+    protected BraintreeGatewayInterface $gateway;
 
-    public function __construct(Braintree $gateway)
+    public function __construct(BraintreeGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }

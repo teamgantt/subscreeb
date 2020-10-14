@@ -10,6 +10,7 @@ use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\BraintreeSubscriptionGateway;
 use TeamGantt\Subscreeb\Gateways\Braintree\Configuration;
+use TeamGantt\Subscreeb\Gateways\Braintree\Gateway\DefaultGateway;
 use TeamGantt\Subscreeb\Models\SubscriptionStatus;
 use TeamGantt\Subscreeb\Subscriptions\SubscriptionManager;
 
@@ -26,7 +27,9 @@ describe('SubscriptionManager', function () {
             $_ENV['BRAINTREE_PRIVATE_KEY']
         );
 
-        $this->gateway = new BraintreeSubscriptionGateway($this->config);
+        $braintreeGateway = new DefaultGateway($this->config);
+
+        $this->gateway = new BraintreeSubscriptionGateway($braintreeGateway);
         $this->manager = new SubscriptionManager($this->gateway);
 
         $this->faker = \Faker\Factory::create();

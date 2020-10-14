@@ -2,17 +2,17 @@
 
 namespace TeamGantt\Subscreeb\Gateways\Braintree;
 
-use Braintree\Gateway;
 use TeamGantt\Subscreeb\Exceptions\PlanNotFoundException;
+use TeamGantt\Subscreeb\Gateways\Braintree\Gateway\BraintreeGatewayInterface;
 use TeamGantt\Subscreeb\Models\Plan;
 use TeamGantt\Subscreeb\Models\Subscription;
 
 class UpdatedSubscriptionBuilder implements UpdatedSubscriptionBuilderInterface
 {
     /**
-     * @var Gateway
+     * @var BraintreeGatewayInterface
      */
-    protected Gateway $gateway;
+    protected BraintreeGatewayInterface $gateway;
 
     /**
      * @var Subscription
@@ -30,9 +30,9 @@ class UpdatedSubscriptionBuilder implements UpdatedSubscriptionBuilderInterface
     /**
      * UpdatedSubscriptionBuilder constructor
      *
-     * @param Gateway $gateway
+     * @param BraintreeGatewayInterface $gateway
      */
-    public function __construct(Gateway $gateway)
+    public function __construct(BraintreeGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }

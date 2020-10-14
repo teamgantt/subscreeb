@@ -8,15 +8,16 @@ use TeamGantt\Subscreeb\Exceptions\CreateSubscriptionException;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Exceptions\SubscriptionNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\Customer\CustomerStrategy;
+use TeamGantt\Subscreeb\Gateways\Braintree\Gateway\BraintreeGatewayInterface;
 use TeamGantt\Subscreeb\Gateways\SubscriptionGatewayInterface;
 use TeamGantt\Subscreeb\Models\Subscription;
 
 class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
 {
     /**
-     * @var Braintree
+     * @var BraintreeGatewayInterface
      */
-    protected Braintree $gateway;
+    protected BraintreeGatewayInterface $gateway;
 
     /**
      * @var CustomerStrategy
@@ -34,18 +35,14 @@ class BraintreeSubscriptionGateway implements SubscriptionGatewayInterface
     protected UpdatedSubscriptionBuilder $updatedSubscriptionBuilder;
 
     /**
-     * BraintreeSubscriptionGateway constructor.
-     * @param ConfigurationInterface $config
+     * BraintreeSubscriptionGateway constructor
+     *
+     * @param BraintreeGatewayInterface $gateway
+     * @return void
      */
-    public function __construct(ConfigurationInterface $config)
+    public function __construct(BraintreeGatewayInterface $gateway)
     {
-        $this->gateway = new Braintree([
-            'environment' => $config->getEnvironment(),
-            'merchantId' => $config->getMerchantId(),
-            'publicKey' => $config->getPublicKey(),
-            'privateKey' => $config->getPrivateKey()
-        ]);
-
+        $this->gateway = $gateway;
         $this->customerStrategy = new CustomerStrategy($this->gateway);
         $this->updatedSubscriptionBuilder = new UpdatedSubscriptionBuilder($this->gateway);
         $this->subscriptionMapper = new SubscriptionMapper($this->gateway);
