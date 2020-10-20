@@ -3,6 +3,8 @@
 namespace TeamGantt\Subscreeb\Tests;
 
 use Dotenv\Dotenv;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use TeamGantt\Subscreeb\Exceptions\CustomerNotFoundException;
 use TeamGantt\Subscreeb\Exceptions\NegativePriceException;
 use TeamGantt\Subscreeb\Exceptions\PlanNotFoundException;
@@ -10,6 +12,7 @@ use TeamGantt\Subscreeb\Exceptions\SubscriptionNotFoundException;
 use TeamGantt\Subscreeb\Gateways\Braintree\BraintreeSubscriptionGateway;
 use TeamGantt\Subscreeb\Gateways\Braintree\Configuration;
 use TeamGantt\Subscreeb\Gateways\Braintree\Gateway\DefaultGateway;
+use TeamGantt\Subscreeb\Gateways\Braintree\Gateway\InstrumentedGateway;
 use TeamGantt\Subscreeb\Gateways\Braintree\UpdateSubscriptionException;
 use TeamGantt\Subscreeb\Models\Subscription;
 use TeamGantt\Subscreeb\Models\SubscriptionStatus;
@@ -30,7 +33,17 @@ describe('BraintreeSubscriptionGateway', function () {
             $_ENV['BRAINTREE_PRIVATE_KEY']
         );
 
+        // Support instrumented braintree gateways to observe responses
+        $isLoggingEnabled = getenv('LOGS') !== null;
         $braintreeGateway = new DefaultGateway($this->config);
+        if ($isLoggingEnabled) {
+            $logName = __DIR__ . '/../../logs/' . basename(__FILE__, '.php') . '-' . time() . '.log';
+            $stream = fopen($logName, 'w+');
+            $streamHandler = new StreamHandler($stream);
+            $logger = new Logger('Subscreeb');
+            $logger->pushHandler($streamHandler);
+            $braintreeGateway = new InstrumentedGateway($this->config, $logger);
+        }
 
         $this->gateway = new BraintreeSubscriptionGateway($braintreeGateway);
 
@@ -51,7 +64,7 @@ describe('BraintreeSubscriptionGateway', function () {
     });
 
     context('getting subscriptions by customer', function () {
-        it('should get multiple subscriptions', function () {
+        fit('should get multiple subscriptions', function () {
             $mapper = new SubscriptionRequestMapper();
 
             $subscription1 = $mapper->map([

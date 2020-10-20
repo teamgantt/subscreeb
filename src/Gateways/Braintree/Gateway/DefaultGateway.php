@@ -63,4 +63,12 @@ class DefaultGateway implements BraintreeGatewayInterface
     {
         return $this->gateway->plan();
     }
+
+    /**
+     * @return Gateway 
+     */
+    public function getUnderlyingGateway()
+    {
+        return $this->gateway;
+    }
 }

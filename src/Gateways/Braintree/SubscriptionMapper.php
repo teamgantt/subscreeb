@@ -36,7 +36,7 @@ class SubscriptionMapper implements SubscriptionMapperInterface
     {
         $subscriptionId = $subscription->id;
         $price = (float)$subscription->price;
-        $startDate = Carbon::instance($subscription->firstBillingDate)->toDateString();
+        $startDate = $this->mapDate($subscription->firstBillingDate);
 
         $customer = $this->fromBraintreeCustomer($subscription);
 
@@ -49,6 +49,23 @@ class SubscriptionMapper implements SubscriptionMapperInterface
         $status = strtolower($subscription->status);
 
         return new Subscription($subscriptionId, $customer, $payment, $plan, $addOns, $discounts, $price, $startDate, $status);
+    }
+
+    /**
+     * Handles mapping dates that could be presented in multiple formats - i.e 
+     * json dates with separate date parts
+     * 
+     * @param mixed $date 
+     * @return string
+     */
+    protected function mapDate($date)
+    {
+        if (is_array($date)) {
+            $instance = new Carbon($date['date'], $date['timezone']);
+            return $instance->toDateString();
+        }
+
+        return Carbon::instance($date)->toDateString();
     }
 
     /**

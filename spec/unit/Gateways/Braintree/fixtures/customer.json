@@ -1,0 +1,670 @@
+{
+    "id": "629290106",
+    "merchantId": "wqbs5b6787xhfzcp",
+    "firstName": "Jeremie",
+    "lastName": "O'Conner",
+    "company": null,
+    "email": "lcasper@hotmail.com",
+    "phone": null,
+    "fax": null,
+    "website": null,
+    "createdAt": {
+        "date": "2020-10-19 14:19:08.000000",
+        "timezone_type": 3,
+        "timezone": "UTC"
+    },
+    "updatedAt": {
+        "date": "2020-10-19 14:19:09.000000",
+        "timezone_type": 3,
+        "timezone": "UTC"
+    },
+    "customFields": [],
+    "globalId": "Y3VzdG9tZXJfNjI5MjkwMTA2",
+    "creditCards": [
+        {
+            "bin": "555555",
+            "expirationMonth": "12",
+            "expirationYear": "2021",
+            "last4": "4444",
+            "billingAddress": {
+                "id": "cf",
+                "customerId": "629290106",
+                "firstName": null,
+                "lastName": null,
+                "company": null,
+                "streetAddress": null,
+                "extendedAddress": null,
+                "locality": null,
+                "region": null,
+                "postalCode": "94107",
+                "countryCodeAlpha2": null,
+                "countryCodeAlpha3": null,
+                "countryCodeNumeric": null,
+                "countryName": null,
+                "phoneNumber": null,
+                "createdAt": {
+                    "date": "2020-10-19 14:19:08.000000",
+                    "timezone_type": 3,
+                    "timezone": "UTC"
+                },
+                "updatedAt": {
+                    "date": "2020-10-19 14:19:08.000000",
+                    "timezone_type": 3,
+                    "timezone": "UTC"
+                }
+            },
+            "cardType": "MasterCard",
+            "cardholderName": null,
+            "commercial": "Unknown",
+            "countryOfIssuance": "Unknown",
+            "createdAt": {
+                "date": "2020-10-19 14:19:08.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "customerId": "629290106",
+            "customerGlobalId": "Y3VzdG9tZXJfNjI5MjkwMTA2",
+            "customerLocation": "US",
+            "debit": "Unknown",
+            "default": true,
+            "durbinRegulated": "Unknown",
+            "expired": false,
+            "globalId": "cGF5bWVudG1ldGhvZF9jY19ocnZwZmRi",
+            "healthcare": "Unknown",
+            "imageUrl": "https://assets.braintreegateway.com/payment_method_logo/mastercard.png?environment=sandbox",
+            "issuingBank": "Unknown",
+            "payroll": "Unknown",
+            "prepaid": "Unknown",
+            "productId": "Unknown",
+            "subscriptions": [
+                {
+                    "addOns": [],
+                    "balance": "0.00",
+                    "billingDayOfMonth": 19,
+                    "billingPeriodEndDate": {
+                        "date": "2020-11-18 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "billingPeriodStartDate": {
+                        "date": "2020-10-19 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "createdAt": {
+                        "date": "2020-10-19 14:19:09.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "updatedAt": {
+                        "date": "2020-10-19 14:19:09.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "currentBillingCycle": 1,
+                    "daysPastDue": null,
+                    "discounts": [],
+                    "failureCount": 0,
+                    "firstBillingDate": {
+                        "date": "2020-10-19 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "id": "63m426",
+                    "merchantAccountId": "teamgantt",
+                    "neverExpires": true,
+                    "nextBillAmount": "10.00",
+                    "nextBillingPeriodAmount": "10.00",
+                    "nextBillingDate": {
+                        "date": "2020-11-19 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "numberOfBillingCycles": null,
+                    "paidThroughDate": {
+                        "date": "2020-11-18 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "paymentMethodToken": "hrvpfdb",
+                    "planId": "test-plan-b-monthly",
+                    "price": "10.00",
+                    "status": "Active",
+                    "trialDuration": null,
+                    "trialDurationUnit": null,
+                    "trialPeriod": false,
+                    "descriptor": {},
+                    "description": null,
+                    "transactions": [
+                        {
+                            "id": "36zb9q0w",
+                            "status": "submitted_for_settlement",
+                            "type": "sale",
+                            "currencyIsoCode": "USD",
+                            "amount": "10.00",
+                            "merchantAccountId": "teamgantt",
+                            "subMerchantAccountId": null,
+                            "masterMerchantAccountId": null,
+                            "orderId": null,
+                            "createdAt": {
+                                "date": "2020-10-19 14:19:09.000000",
+                                "timezone_type": 3,
+                                "timezone": "UTC"
+                            },
+                            "updatedAt": {
+                                "date": "2020-10-19 14:19:09.000000",
+                                "timezone_type": 3,
+                                "timezone": "UTC"
+                            },
+                            "customer": {
+                                "id": "629290106",
+                                "firstName": "Jeremie",
+                                "lastName": "O'Conner",
+                                "company": null,
+                                "email": "lcasper@hotmail.com",
+                                "website": null,
+                                "phone": null,
+                                "fax": null,
+                                "globalId": "Y3VzdG9tZXJfNjI5MjkwMTA2"
+                            },
+                            "billing": {
+                                "id": "cf",
+                                "firstName": null,
+                                "lastName": null,
+                                "company": null,
+                                "streetAddress": null,
+                                "extendedAddress": null,
+                                "locality": null,
+                                "region": null,
+                                "postalCode": "94107",
+                                "countryName": null,
+                                "countryCodeAlpha2": null,
+                                "countryCodeAlpha3": null,
+                                "countryCodeNumeric": null
+                            },
+                            "refundId": null,
+                            "refundIds": [],
+                            "refundedTransactionId": null,
+                            "partialSettlementTransactionIds": [],
+                            "authorizedTransactionId": null,
+                            "settlementBatchId": null,
+                            "shipping": {
+                                "id": null,
+                                "firstName": null,
+                                "lastName": null,
+                                "company": null,
+                                "streetAddress": null,
+                                "extendedAddress": null,
+                                "locality": null,
+                                "region": null,
+                                "postalCode": null,
+                                "countryName": null,
+                                "countryCodeAlpha2": null,
+                                "countryCodeAlpha3": null,
+                                "countryCodeNumeric": null
+                            },
+                            "customFields": null,
+                            "avsErrorResponseCode": null,
+                            "avsPostalCodeResponseCode": "M",
+                            "avsStreetAddressResponseCode": "I",
+                            "cvvResponseCode": "I",
+                            "gatewayRejectionReason": null,
+                            "processorAuthorizationCode": "MCFZK8",
+                            "processorResponseCode": "1000",
+                            "processorResponseText": "Approved",
+                            "additionalProcessorResponse": null,
+                            "voiceReferralNumber": null,
+                            "purchaseOrderNumber": null,
+                            "taxAmount": null,
+                            "taxExempt": false,
+                            "processedWithNetworkToken": false,
+                            "creditCard": {
+                                "token": "hrvpfdb",
+                                "bin": "555555",
+                                "last4": "4444",
+                                "cardType": "MasterCard",
+                                "expirationMonth": "12",
+                                "expirationYear": "2021",
+                                "customerLocation": "US",
+                                "cardholderName": null,
+                                "imageUrl": "https://assets.braintreegateway.com/payment_method_logo/mastercard.png?environment=sandbox",
+                                "prepaid": "Unknown",
+                                "healthcare": "Unknown",
+                                "debit": "Unknown",
+                                "durbinRegulated": "Unknown",
+                                "commercial": "Unknown",
+                                "payroll": "Unknown",
+                                "issuingBank": "Unknown",
+                                "countryOfIssuance": "Unknown",
+                                "productId": "Unknown",
+                                "globalId": "cGF5bWVudG1ldGhvZF9jY19ocnZwZmRi",
+                                "accountType": null,
+                                "uniqueNumberIdentifier": "b5f44db97d0891f0d31118b3d3b639e5",
+                                "venmoSdk": false
+                            },
+                            "statusHistory": [
+                                {},
+                                {}
+                            ],
+                            "planId": "test-plan-b-monthly",
+                            "subscriptionId": "63m426",
+                            "subscription": {
+                                "billingPeriodEndDate": {
+                                    "date": "2020-11-18 00:00:00.000000",
+                                    "timezone_type": 3,
+                                    "timezone": "UTC"
+                                },
+                                "billingPeriodStartDate": {
+                                    "date": "2020-10-19 00:00:00.000000",
+                                    "timezone_type": 3,
+                                    "timezone": "UTC"
+                                }
+                            },
+                            "addOns": [],
+                            "discounts": [],
+                            "descriptor": {},
+                            "recurring": true,
+                            "channel": null,
+                            "serviceFeeAmount": null,
+                            "escrowStatus": null,
+                            "disbursementDetails": {},
+                            "disputes": [],
+                            "authorizationAdjustments": [],
+                            "paymentInstrumentType": "credit_card",
+                            "processorSettlementResponseCode": null,
+                            "processorSettlementResponseText": null,
+                            "networkResponseCode": "XX",
+                            "networkResponseText": "sample network response text",
+                            "threeDSecureInfo": null,
+                            "shipsFromPostalCode": null,
+                            "shippingAmount": null,
+                            "discountAmount": null,
+                            "networkTransactionId": "020201019141909",
+                            "processorResponseType": "approved",
+                            "authorizationExpiresAt": {
+                                "date": "2020-10-26 14:19:09.000000",
+                                "timezone_type": 3,
+                                "timezone": "UTC"
+                            },
+                            "refundGlobalIds": [],
+                            "partialSettlementTransactionGlobalIds": [],
+                            "refundedTransactionGlobalId": null,
+                            "authorizedTransactionGlobalId": null,
+                            "globalId": "dHJhbnNhY3Rpb25fMzZ6YjlxMHc",
+                            "retryIds": [],
+                            "retriedTransactionId": null,
+                            "retrievalReferenceNumber": "1234567",
+                            "installmentCount": null,
+                            "responseEmvData": null,
+                            "creditCardDetails": {},
+                            "customerDetails": {},
+                            "billingDetails": {},
+                            "shippingDetails": {},
+                            "subscriptionDetails": {}
+                        }
+                    ],
+                    "statusHistory": [
+                        {},
+                        {}
+                    ]
+                }
+            ],
+            "token": "hrvpfdb",
+            "uniqueNumberIdentifier": "b5f44db97d0891f0d31118b3d3b639e5",
+            "updatedAt": {
+                "date": "2020-10-19 14:19:08.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "venmoSdk": false,
+            "verifications": [],
+            "isNetworkTokenized": false,
+            "graphQLId": "cGF5bWVudG1ldGhvZF9jY19ocnZwZmRi",
+            "expirationDate": "12/2021",
+            "maskedNumber": "555555******4444"
+        }
+    ],
+    "addresses": [
+        {
+            "id": "cf",
+            "customerId": "629290106",
+            "firstName": null,
+            "lastName": null,
+            "company": null,
+            "streetAddress": null,
+            "extendedAddress": null,
+            "locality": null,
+            "region": null,
+            "postalCode": "94107",
+            "countryCodeAlpha2": null,
+            "countryCodeAlpha3": null,
+            "countryCodeNumeric": null,
+            "countryName": null,
+            "phoneNumber": null,
+            "createdAt": {
+                "date": "2020-10-19 14:19:08.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "updatedAt": {
+                "date": "2020-10-19 14:19:08.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            }
+        }
+    ],
+    "paypalAccounts": [],
+    "applePayCards": [],
+    "androidPayCards": [],
+    "amexExpressCheckoutCards": [],
+    "venmoAccounts": [],
+    "visaCheckoutCards": [],
+    "masterpassCards": [],
+    "samsungPayCards": [],
+    "usBankAccounts": [],
+    "graphQLId": "Y3VzdG9tZXJfNjI5MjkwMTA2",
+    "paymentMethods": [
+        {
+            "bin": "555555",
+            "expirationMonth": "12",
+            "expirationYear": "2021",
+            "last4": "4444",
+            "billingAddress": {
+                "id": "cf",
+                "customerId": "629290106",
+                "firstName": null,
+                "lastName": null,
+                "company": null,
+                "streetAddress": null,
+                "extendedAddress": null,
+                "locality": null,
+                "region": null,
+                "postalCode": "94107",
+                "countryCodeAlpha2": null,
+                "countryCodeAlpha3": null,
+                "countryCodeNumeric": null,
+                "countryName": null,
+                "phoneNumber": null,
+                "createdAt": {
+                    "date": "2020-10-19 14:19:08.000000",
+                    "timezone_type": 3,
+                    "timezone": "UTC"
+                },
+                "updatedAt": {
+                    "date": "2020-10-19 14:19:08.000000",
+                    "timezone_type": 3,
+                    "timezone": "UTC"
+                }
+            },
+            "cardType": "MasterCard",
+            "cardholderName": null,
+            "commercial": "Unknown",
+            "countryOfIssuance": "Unknown",
+            "createdAt": {
+                "date": "2020-10-19 14:19:08.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "customerId": "629290106",
+            "customerGlobalId": "Y3VzdG9tZXJfNjI5MjkwMTA2",
+            "customerLocation": "US",
+            "debit": "Unknown",
+            "default": true,
+            "durbinRegulated": "Unknown",
+            "expired": false,
+            "globalId": "cGF5bWVudG1ldGhvZF9jY19ocnZwZmRi",
+            "healthcare": "Unknown",
+            "imageUrl": "https://assets.braintreegateway.com/payment_method_logo/mastercard.png?environment=sandbox",
+            "issuingBank": "Unknown",
+            "payroll": "Unknown",
+            "prepaid": "Unknown",
+            "productId": "Unknown",
+            "subscriptions": [
+                {
+                    "addOns": [],
+                    "balance": "0.00",
+                    "billingDayOfMonth": 19,
+                    "billingPeriodEndDate": {
+                        "date": "2020-11-18 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "billingPeriodStartDate": {
+                        "date": "2020-10-19 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "createdAt": {
+                        "date": "2020-10-19 14:19:09.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "updatedAt": {
+                        "date": "2020-10-19 14:19:09.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "currentBillingCycle": 1,
+                    "daysPastDue": null,
+                    "discounts": [],
+                    "failureCount": 0,
+                    "firstBillingDate": {
+                        "date": "2020-10-19 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "id": "63m426",
+                    "merchantAccountId": "teamgantt",
+                    "neverExpires": true,
+                    "nextBillAmount": "10.00",
+                    "nextBillingPeriodAmount": "10.00",
+                    "nextBillingDate": {
+                        "date": "2020-11-19 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "numberOfBillingCycles": null,
+                    "paidThroughDate": {
+                        "date": "2020-11-18 00:00:00.000000",
+                        "timezone_type": 3,
+                        "timezone": "UTC"
+                    },
+                    "paymentMethodToken": "hrvpfdb",
+                    "planId": "test-plan-b-monthly",
+                    "price": "10.00",
+                    "status": "Active",
+                    "trialDuration": null,
+                    "trialDurationUnit": null,
+                    "trialPeriod": false,
+                    "descriptor": {},
+                    "description": null,
+                    "transactions": [
+                        {
+                            "id": "36zb9q0w",
+                            "status": "submitted_for_settlement",
+                            "type": "sale",
+                            "currencyIsoCode": "USD",
+                            "amount": "10.00",
+                            "merchantAccountId": "teamgantt",
+                            "subMerchantAccountId": null,
+                            "masterMerchantAccountId": null,
+                            "orderId": null,
+                            "createdAt": {
+                                "date": "2020-10-19 14:19:09.000000",
+                                "timezone_type": 3,
+                                "timezone": "UTC"
+                            },
+                            "updatedAt": {
+                                "date": "2020-10-19 14:19:09.000000",
+                                "timezone_type": 3,
+                                "timezone": "UTC"
+                            },
+                            "customer": {
+                                "id": "629290106",
+                                "firstName": "Jeremie",
+                                "lastName": "O'Conner",
+                                "company": null,
+                                "email": "lcasper@hotmail.com",
+                                "website": null,
+                                "phone": null,
+                                "fax": null,
+                                "globalId": "Y3VzdG9tZXJfNjI5MjkwMTA2"
+                            },
+                            "billing": {
+                                "id": "cf",
+                                "firstName": null,
+                                "lastName": null,
+                                "company": null,
+                                "streetAddress": null,
+                                "extendedAddress": null,
+                                "locality": null,
+                                "region": null,
+                                "postalCode": "94107",
+                                "countryName": null,
+                                "countryCodeAlpha2": null,
+                                "countryCodeAlpha3": null,
+                                "countryCodeNumeric": null
+                            },
+                            "refundId": null,
+                            "refundIds": [],
+                            "refundedTransactionId": null,
+                            "partialSettlementTransactionIds": [],
+                            "authorizedTransactionId": null,
+                            "settlementBatchId": null,
+                            "shipping": {
+                                "id": null,
+                                "firstName": null,
+                                "lastName": null,
+                                "company": null,
+                                "streetAddress": null,
+                                "extendedAddress": null,
+                                "locality": null,
+                                "region": null,
+                                "postalCode": null,
+                                "countryName": null,
+                                "countryCodeAlpha2": null,
+                                "countryCodeAlpha3": null,
+                                "countryCodeNumeric": null
+                            },
+                            "customFields": null,
+                            "avsErrorResponseCode": null,
+                            "avsPostalCodeResponseCode": "M",
+                            "avsStreetAddressResponseCode": "I",
+                            "cvvResponseCode": "I",
+                            "gatewayRejectionReason": null,
+                            "processorAuthorizationCode": "MCFZK8",
+                            "processorResponseCode": "1000",
+                            "processorResponseText": "Approved",
+                            "additionalProcessorResponse": null,
+                            "voiceReferralNumber": null,
+                            "purchaseOrderNumber": null,
+                            "taxAmount": null,
+                            "taxExempt": false,
+                            "processedWithNetworkToken": false,
+                            "creditCard": {
+                                "token": "hrvpfdb",
+                                "bin": "555555",
+                                "last4": "4444",
+                                "cardType": "MasterCard",
+                                "expirationMonth": "12",
+                                "expirationYear": "2021",
+                                "customerLocation": "US",
+                                "cardholderName": null,
+                                "imageUrl": "https://assets.braintreegateway.com/payment_method_logo/mastercard.png?environment=sandbox",
+                                "prepaid": "Unknown",
+                                "healthcare": "Unknown",
+                                "debit": "Unknown",
+                                "durbinRegulated": "Unknown",
+                                "commercial": "Unknown",
+                                "payroll": "Unknown",
+                                "issuingBank": "Unknown",
+                                "countryOfIssuance": "Unknown",
+                                "productId": "Unknown",
+                                "globalId": "cGF5bWVudG1ldGhvZF9jY19ocnZwZmRi",
+                                "accountType": null,
+                                "uniqueNumberIdentifier": "b5f44db97d0891f0d31118b3d3b639e5",
+                                "venmoSdk": false
+                            },
+                            "statusHistory": [
+                                {},
+                                {}
+                            ],
+                            "planId": "test-plan-b-monthly",
+                            "subscriptionId": "63m426",
+                            "subscription": {
+                                "billingPeriodEndDate": {
+                                    "date": "2020-11-18 00:00:00.000000",
+                                    "timezone_type": 3,
+                                    "timezone": "UTC"
+                                },
+                                "billingPeriodStartDate": {
+                                    "date": "2020-10-19 00:00:00.000000",
+                                    "timezone_type": 3,
+                                    "timezone": "UTC"
+                                }
+                            },
+                            "addOns": [],
+                            "discounts": [],
+                            "descriptor": {},
+                            "recurring": true,
+                            "channel": null,
+                            "serviceFeeAmount": null,
+                            "escrowStatus": null,
+                            "disbursementDetails": {},
+                            "disputes": [],
+                            "authorizationAdjustments": [],
+                            "paymentInstrumentType": "credit_card",
+                            "processorSettlementResponseCode": null,
+                            "processorSettlementResponseText": null,
+                            "networkResponseCode": "XX",
+                            "networkResponseText": "sample network response text",
+                            "threeDSecureInfo": null,
+                            "shipsFromPostalCode": null,
+                            "shippingAmount": null,
+                            "discountAmount": null,
+                            "networkTransactionId": "020201019141909",
+                            "processorResponseType": "approved",
+                            "authorizationExpiresAt": {
+                                "date": "2020-10-26 14:19:09.000000",
+                                "timezone_type": 3,
+                                "timezone": "UTC"
+                            },
+                            "refundGlobalIds": [],
+                            "partialSettlementTransactionGlobalIds": [],
+                            "refundedTransactionGlobalId": null,
+                            "authorizedTransactionGlobalId": null,
+                            "globalId": "dHJhbnNhY3Rpb25fMzZ6YjlxMHc",
+                            "retryIds": [],
+                            "retriedTransactionId": null,
+                            "retrievalReferenceNumber": "1234567",
+                            "installmentCount": null,
+                            "responseEmvData": null,
+                            "creditCardDetails": {},
+                            "customerDetails": {},
+                            "billingDetails": {},
+                            "shippingDetails": {},
+                            "subscriptionDetails": {}
+                        }
+                    ],
+                    "statusHistory": [
+                        {},
+                        {}
+                    ]
+                }
+            ],
+            "token": "hrvpfdb",
+            "uniqueNumberIdentifier": "b5f44db97d0891f0d31118b3d3b639e5",
+            "updatedAt": {
+                "date": "2020-10-19 14:19:08.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "venmoSdk": false,
+            "verifications": [],
+            "isNetworkTokenized": false,
+            "graphQLId": "cGF5bWVudG1ldGhvZF9jY19ocnZwZmRi",
+            "expirationDate": "12/2021",
+            "maskedNumber": "555555******4444"
+        }
+    ]
+}
