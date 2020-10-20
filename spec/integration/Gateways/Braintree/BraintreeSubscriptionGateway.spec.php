@@ -64,7 +64,7 @@ describe('BraintreeSubscriptionGateway', function () {
     });
 
     context('getting subscriptions by customer', function () {
-        fit('should get multiple subscriptions', function () {
+        it('should get multiple subscriptions', function () {
             $mapper = new SubscriptionRequestMapper();
 
             $subscription1 = $mapper->map([
